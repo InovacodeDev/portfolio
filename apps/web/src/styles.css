@@ -145,3 +145,265 @@ small {
 .space-48 { margin: 48px; }
 .space-64 { margin: 64px; }
 .space-96 { margin: 96px; }
+
+/* Layout System - Grid de 12 colunas */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+}
+
+/* Text utilities */
+.text-accent {
+    color: var(--color-accent-primary);
+}
+
+/* Section base styles */
+section {
+    padding: 96px 0;
+    position: relative;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.section-subtitle {
+    font-size: 20px;
+    margin-top: 16px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    margin-bottom: 24px;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    margin-bottom: 48px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Solutions Section */
+.solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 32px;
+}
+
+.solution-card {
+    height: 100%;
+}
+
+.solution-description {
+    margin-bottom: 24px;
+    opacity: 0.9;
+}
+
+.solution-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.solution-feature {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(162, 185, 209, 0.2);
+    color: var(--color-accent-primary);
+    font-size: 16px;
+}
+
+.solution-feature:last-child {
+    border-bottom: none;
+}
+
+/* About Section */
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+}
+
+.about-description {
+    margin-bottom: 24px;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.about-items {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.about-card {
+    padding: 24px;
+}
+
+/* Contact Section */
+.contact-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact-form-card,
+.contact-success {
+    padding: 48px;
+    text-align: center;
+}
+
+.contact-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(162, 185, 209, 0.3);
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-bottom-color: var(--color-accent-primary);
+}
+
+.form-input.error,
+.form-textarea.error {
+    border-bottom-color: #ff6b6b;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: rgba(245, 245, 245, 0.5);
+}
+
+.error-message {
+    display: block;
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.form-submit {
+    width: 100%;
+    margin-top: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+    }
+    
+    section {
+        padding: 64px 0;
+    }
+    
+    .hero-title {
+        font-size: 40px;
+    }
+    
+    .hero-subtitle {
+        font-size: 18px;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .solutions-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+    
+    .contact-form-card,
+    .contact-success {
+        padding: 32px 24px;
+    }
+    
+    h1 {
+        font-size: 40px;
+    }
+    
+    h2 {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 32px;
+    }
+    
+    .solutions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    h1 {
+        font-size: 32px;
+    }
+    
+    h2 {
+        font-size: 28px;
+    }
+}
