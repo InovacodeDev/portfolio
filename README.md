@@ -38,7 +38,21 @@ This workspace contains the monorepo scaffold for the Inovacode landing page and
 - `pnpm dev` - Start all apps in development mode
 - `pnpm build` - Build all apps for production
 - `pnpm lint` - Lint all packages
+- `pnpm type-check` - Type check all TypeScript packages
 - `pnpm test` - Run tests across all packages
+
+## 🚀 CI/CD Pipeline
+
+This project includes a comprehensive CI pipeline that runs on every Pull Request:
+
+- **Lint**: ESLint verification across all packages
+- **Type Check**: TypeScript type verification
+- **Test**: Unit tests execution
+- **Build**: Production build validation
+
+The pipeline uses **Turborepo caching** and **pnpm optimizations** for fast execution.
+
+See the complete CI/CD documentation at [`docs/ci-cd-pipeline.md`](./docs/ci-cd-pipeline.md).
 
 ## 🗄️ Database Setup
 
@@ -53,6 +67,7 @@ Quick setup:
 
 ## 📚 Documentation
 
+- [CI/CD Pipeline](./docs/ci-cd-pipeline.md) - GitHub Actions workflow documentation
 - [Database Setup](./docs/setup-database.md) - Complete Supabase configuration guide
 - [Development Tasks](./docs/development/tasks.md) - Implementation backlog
 - [Technical Design](./docs/development/technical_design.md) - System architecture
