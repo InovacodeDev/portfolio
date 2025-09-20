@@ -11,6 +11,7 @@
         "dev": "turbo run dev --concurrency 3",
         "build": "turbo run build",
         "lint": "turbo run lint",
+        "type-check": "turbo run type-check",
         "test": "turbo run test"
     },
     "devDependencies": {
@@ -35,6 +36,7 @@
         "zod": "^4.1.11"
     },
     "dependencies": {
+        "@tailwindcss/postcss": "^4.1.13",
         "react": "^19.1.1",
         "react-dom": "^19.1.1"
     }

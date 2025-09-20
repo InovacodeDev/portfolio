@@ -22,6 +22,12 @@
                 "^test"
             ],
             "outputs": []
+        },
+        "type-check": {
+            "dependsOn": [
+                "^type-check"
+            ],
+            "outputs": []
         }
     }
 }
