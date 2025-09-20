@@ -1,0 +1,11 @@
+{
+    "name": "@inovacode/db",
+    "version": "0.0.0",
+    "private": true,
+    "main": "schema.ts",
+    "devDependencies": {
+        "drizzle-orm": "latest",
+        "drizzle-kit": "latest",
+        "typescript": "latest"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "extends": "@inovacode/tsconfig/base.json",
+    "compilerOptions": {
+        "module": "CommonJS",
+        "outDir": "dist",
+        "rootDir": "src",
+        "noEmit": false
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+}

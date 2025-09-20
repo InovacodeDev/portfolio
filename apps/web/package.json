@@ -1,0 +1,29 @@
+{
+    "name": "@inovacode/web",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint .",
+        "test": "echo \"No tests yet\""
+    },
+    "dependencies": {
+        "react": "latest",
+        "react-dom": "latest",
+        "@tanstack/react-query": "latest",
+        "axios": "latest"
+    },
+    "devDependencies": {
+        "@inovacode/eslint-config": "workspace:*",
+        "@inovacode/tsconfig": "workspace:*",
+        "vite": "latest",
+        "@vitejs/plugin-react": "latest",
+        "tailwindcss": "latest",
+        "postcss": "latest",
+        "autoprefixer": "latest",
+        "typescript": "latest",
+        "eslint": "latest"
+    }
+}

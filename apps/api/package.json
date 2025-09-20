@@ -1,0 +1,27 @@
+{
+    "name": "@inovacode/api",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+        "build": "tsc",
+        "lint": "eslint .",
+        "test": "echo \"No tests yet\""
+    },
+    "dependencies": {
+        "fastify": "latest",
+        "zod": "latest",
+        "pino": "latest",
+        "pg": "latest",
+        "@inovacode/db": "workspace:*",
+        "dotenv": "latest"
+    },
+    "devDependencies": {
+        "@inovacode/eslint-config": "workspace:*",
+        "@inovacode/tsconfig": "workspace:*",
+        "ts-node-dev": "latest",
+        "typescript": "latest",
+        "eslint": "latest",
+        "@types/pg": "latest"
+    }
+}

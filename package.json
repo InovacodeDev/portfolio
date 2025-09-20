@@ -1,0 +1,41 @@
+{
+    "name": "inovacode-porfolio",
+    "private": true,
+    "version": "0.0.0",
+    "packageManager": "pnpm@9.0.0",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "turbo run dev --concurrency 3",
+        "build": "turbo run build",
+        "lint": "turbo run lint",
+        "test": "turbo run test"
+    },
+    "devDependencies": {
+        "@types/node": "^24.5.2",
+        "@types/react": "^19.1.13",
+        "@types/react-dom": "^19.1.9",
+        "@vitejs/plugin-react": "^5.0.3",
+        "autoprefixer": "^10.4.21",
+        "drizzle-kit": "^0.31.4",
+        "drizzle-orm": "^0.44.5",
+        "eslint": "latest",
+        "fastify": "^5.6.0",
+        "pg": "^8.16.3",
+        "pino": "^9.11.0",
+        "postcss": "^8.5.6",
+        "prettier": "latest",
+        "tailwindcss": "^4.1.13",
+        "ts-node-dev": "^2.0.0",
+        "turbo": "latest",
+        "typescript": "latest",
+        "vite": "^7.1.6",
+        "zod": "^4.1.11"
+    },
+    "dependencies": {
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1"
+    }
+}
