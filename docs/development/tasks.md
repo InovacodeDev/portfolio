@@ -6,15 +6,17 @@ Este documento representa o backlog de engenharia para o desenvolvimento do MVP 
 
 ---
 
-## Épico 1: Configuração do Projeto e Fundação da Infraestrutura
+## Épico 1: Configuração do Projeto e Fundação da Infraestrutura ✅ CONCLUÍDO
 
 *Objetivo: Estabelecer a base do monorepo, configurar as ferramentas de desenvolvimento, e provisionar a infraestrutura básica.*
 
+**Status**: ✅ **CONCLUÍDO** - Todas as tarefas T-101, T-102 e T-103 foram implementadas com sucesso.
+
 | ID | Título | História de Usuário Relacionada | Requisitos Associados | Descrição Técnica Detalhada | Critérios de Aceitação (DoD) | Esforço |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **T-101** | **[CORE]** Inicializar monorepo com Turborepo e pnpm | Como Desenvolvedor, eu quero um monorepo configurado para gerenciar o frontend e backend de forma coesa. | N/A | Crie a estrutura de pastas (`apps/web`, `apps/api`, `packages/tsconfig`, `packages/eslint-config`). Configure `pnpm-workspace.yaml` e `turbo.json`. Adicione as configurações base de TypeScript e ESLint nos pacotes compartilhados. | `- [ ]` Comando `pnpm install` executa com sucesso.<br>`- [ ]` Comando `pnpm dev` está configurado para iniciar ambos os apps.<br>`- [ ]` Configurações de ESLint e TSConfig são herdadas corretamente por `web` e `api`. | **3** |
-| **T-102** | **[INFRA]** Provisionar banco de dados PostgreSQL no Supabase | Como Desenvolvedor, eu quero uma instância de banco de dados pronta para conectar a API. | REQ-NF-017 | Crie um novo projeto no Supabase. Obtenha a URL de conexão do banco de dados (connection string). Armazene essa URL de forma segura como um segredo para uso futuro na API. | `- [ ]` Projeto Supabase está criado.<br>`- [ ]` A URL de conexão está documentada no `.env.example` e adicionada a um gerenciador de segredos. | **2** |
-| **T-103** | **[DEVOPS]** Configurar pipeline de CI com GitHub Actions | Como Desenvolvedor, eu quero que cada PR seja automaticamente verificado para garantir a qualidade do código. | N/A | Crie o arquivo `.github/workflows/ci.yml`. O workflow deve ser disparado em `pull_request` para a branch `main`. Deve instalar dependências com `pnpm`, e executar os comandos `turbo lint`, `turbo test`, e `turbo build`. | `- [ ]` O workflow é disparado corretamente em novas PRs.<br>`- [ ]` O pipeline falha se o linting, testes ou build falharem.<br>`- [ ]` O cache do Turborepo é utilizado para acelerar os builds. | **3** |
+| **T-101** | **[CORE]** Inicializar monorepo com Turborepo e pnpm | Como Desenvolvedor, eu quero um monorepo configurado para gerenciar o frontend e backend de forma coesa. | N/A | Crie a estrutura de pastas (`apps/web`, `apps/api`, `packages/tsconfig`, `packages/eslint-config`). Configure `pnpm-workspace.yaml` e `turbo.json`. Adicione as configurações base de TypeScript e ESLint nos pacotes compartilhados. | `- [x]` Comando `pnpm install` executa com sucesso.<br>`- [x]` Comando `pnpm dev` está configurado para iniciar ambos os apps.<br>`- [x]` Configurações de ESLint e TSConfig são herdadas corretamente por `web` e `api`. | **3** |
+| **T-102** | **[INFRA]** Provisionar banco de dados PostgreSQL no Supabase | Como Desenvolvedor, eu quero uma instância de banco de dados pronta para conectar a API. | REQ-NF-017 | Crie um novo projeto no Supabase. Obtenha a URL de conexão do banco de dados (connection string). Armazene essa URL de forma segura como um segredo para uso futuro na API. | `- [x]` Projeto Supabase está criado.<br>`- [x]` A URL de conexão está documentada no `.env.example` e adicionada a um gerenciador de segredos. | **2** |
+| **T-103** | **[DEVOPS]** Configurar pipeline de CI com GitHub Actions | Como Desenvolvedor, eu quero que cada PR seja automaticamente verificado para garantir a qualidade do código. | N/A | Crie o arquivo `.github/workflows/ci.yml`. O workflow deve ser disparado em `pull_request` para a branch `main`. Deve instalar dependências com `pnpm`, e executar os comandos `turbo lint`, `turbo test`, e `turbo build`. | `- [x]` O workflow é disparado corretamente em novas PRs.<br>`- [x]` O pipeline falha se o linting, testes ou build falharem.<br>`- [x]` O cache do Turborepo é utilizado para acelerar os builds. | **3** |
 
 ---
 

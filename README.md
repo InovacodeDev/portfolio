@@ -2,6 +2,15 @@
 
 This workspace contains the monorepo scaffold for the Inovacode landing page and portfolio.
 
+## 📈 Project Status
+
+**🎯 Épico 1: CONCLUÍDO ✅**
+- T-101: Monorepo setup com Turborepo e pnpm ✅
+- T-102: Database PostgreSQL no Supabase ✅  
+- T-103: Pipeline CI com GitHub Actions ✅
+
+**Next**: Épico 2 - Implementação Frontend estática
+
 ## 🏗️ Workspaces
 
 - `apps/web` - Frontend (Vite + React + Tailwind)
