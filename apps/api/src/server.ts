@@ -1,5 +1,9 @@
-import "dotenv/config";
+import { config } from "dotenv";
+import path from "path";
 import Fastify from "fastify";
+
+// Load environment variables from .env.local in project root
+config({ path: path.resolve(__dirname, "../../../.env.local") });
 
 const server = Fastify({ logger: true });
 

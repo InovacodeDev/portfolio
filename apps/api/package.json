@@ -10,19 +10,20 @@
         "test": "echo \"No tests yet\""
     },
     "dependencies": {
-        "fastify": "latest",
-        "zod": "latest",
-        "pino": "latest",
-        "pg": "latest",
         "@inovacode/db": "workspace:*",
-        "dotenv": "latest"
+        "dotenv": "latest",
+        "fastify": "latest",
+        "pg": "latest",
+        "pino": "latest",
+        "ts-node": "^10.9.2",
+        "zod": "latest"
     },
     "devDependencies": {
         "@inovacode/eslint-config": "workspace:*",
         "@inovacode/tsconfig": "workspace:*",
-        "ts-node-dev": "latest",
-        "typescript": "latest",
+        "@types/pg": "latest",
         "eslint": "latest",
-        "@types/pg": "latest"
+        "ts-node-dev": "latest",
+        "typescript": "latest"
     }
 }
