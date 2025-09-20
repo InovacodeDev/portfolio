@@ -1,5 +1,7 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Card } from '../components';
+import { useSectionAnimation, useCardAnimation } from '../hooks/useScrollAnimation';
 
 const solutions = [
     {
@@ -20,36 +22,58 @@ const solutions = [
 ];
 
 export const SolutionsSection: React.FC = () => {
+    const headerAnimation = useSectionAnimation(0);
+    const card1Animation = useCardAnimation(1);
+    const card2Animation = useCardAnimation(2);
+    const card3Animation = useCardAnimation(3);
+    
+    const cardAnimations = [card1Animation, card2Animation, card3Animation];
+    
     return (
         <section className="solutions-section">
             <div className="container">
-                <div className="section-header">
+                <motion.div 
+                    className="section-header"
+                    ref={headerAnimation.ref}
+                    initial={headerAnimation.initial}
+                    animate={headerAnimation.animate}
+                >
                     <h2>Nossas Soluções</h2>
                     <p className="section-subtitle">
                         Oferecemos um conjunto completo de serviços para transformar 
                         sua visão em realidade digital
                     </p>
-                </div>
+                </motion.div>
                 
                 <div className="solutions-grid">
-                    {solutions.map((solution, index) => (
-                        <Card 
-                            key={index}
-                            title={solution.title}
-                            className="solution-card"
-                        >
-                            <p className="solution-description">
-                                {solution.description}
-                            </p>
-                            <ul className="solution-features">
-                                {solution.features.map((feature, featureIndex) => (
-                                    <li key={featureIndex} className="solution-feature">
-                                        {feature}
-                                    </li>
-                                ))}
-                            </ul>
-                        </Card>
-                    ))}
+                    {solutions.map((solution, index) => {
+                        const cardAnimation = cardAnimations[index];
+                        
+                        return (
+                            <motion.div
+                                key={index}
+                                ref={cardAnimation.ref}
+                                initial={cardAnimation.initial}
+                                animate={cardAnimation.animate}
+                            >
+                                <Card 
+                                    title={solution.title}
+                                    className="solution-card"
+                                >
+                                    <p className="solution-description">
+                                        {solution.description}
+                                    </p>
+                                    <ul className="solution-features">
+                                        {solution.features.map((feature, featureIndex) => (
+                                            <li key={featureIndex} className="solution-feature">
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </Card>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
         </section>

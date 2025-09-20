@@ -1,5 +1,7 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Card } from '../components';
+import { useSectionAnimation, useCardAnimation } from '../hooks/useScrollAnimation';
 
 const aboutItems = [
     {
@@ -17,11 +19,23 @@ const aboutItems = [
 ];
 
 export const AboutSection: React.FC = () => {
+    const textAnimation = useSectionAnimation(0);
+    const card1Animation = useCardAnimation(1);
+    const card2Animation = useCardAnimation(2);
+    const card3Animation = useCardAnimation(3);
+    
+    const cardAnimations = [card1Animation, card2Animation, card3Animation];
+    
     return (
         <section className="about-section">
             <div className="container">
                 <div className="about-content">
-                    <div className="about-text">
+                    <motion.div 
+                        className="about-text"
+                        ref={textAnimation.ref}
+                        initial={textAnimation.initial}
+                        animate={textAnimation.animate}
+                    >
                         <h2>Sobre a Inovacode</h2>
                         <p className="about-description">
                             Somos uma empresa de tecnologia especializada em criar experiências 
@@ -33,19 +47,29 @@ export const AboutSection: React.FC = () => {
                             usuário, garantindo que cada projeto não apenas funcione perfeitamente, 
                             mas também encante quem o utiliza.
                         </p>
-                    </div>
+                    </motion.div>
                     
                     <div className="about-items">
-                        {aboutItems.map((item, index) => (
-                            <Card 
-                                key={index}
-                                title={item.title}
-                                className="about-card"
-                                hoverable={false}
-                            >
-                                <p>{item.content}</p>
-                            </Card>
-                        ))}
+                        {aboutItems.map((item, index) => {
+                            const cardAnimation = cardAnimations[index];
+                            
+                            return (
+                                <motion.div
+                                    key={index}
+                                    ref={cardAnimation.ref}
+                                    initial={cardAnimation.initial}
+                                    animate={cardAnimation.animate}
+                                >
+                                    <Card 
+                                        title={item.title}
+                                        className="about-card"
+                                        hoverable={false}
+                                    >
+                                        <p>{item.content}</p>
+                                    </Card>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
