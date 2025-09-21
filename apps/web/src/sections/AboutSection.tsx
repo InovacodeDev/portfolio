@@ -30,7 +30,7 @@ export const AboutSection: React.FC = () => {
     const cardAnimations = [card1Animation, card2Animation, card3Animation];
 
     return (
-        <section className="about-section">
+        <section id="about" className="about-section" aria-label="Sobre nós">
             <div className="container">
                 <div className="about-content">
                     <motion.div

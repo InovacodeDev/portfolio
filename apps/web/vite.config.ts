@@ -8,4 +8,28 @@ export default defineConfig({
         host: "0.0.0.0",
         strictPort: true,
     },
+    build: {
+        // Otimizações para produção
+        minify: "esbuild", // Usar esbuild que é mais rápido e stable
+        // Configuração de chunks para melhor cache
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ["react", "react-dom"],
+                    query: ["@tanstack/react-query"],
+                    forms: ["react-hook-form", "@hookform/resolvers"],
+                    animation: ["framer-motion"],
+                },
+            },
+        },
+        // Configurações de compressão
+        assetsInlineLimit: 4096, // Assets menores que 4KB serão inline
+        chunkSizeWarningLimit: 1000,
+        // Remoção de console.log em produção
+        target: "esnext",
+    },
+    // Otimizações de dependências
+    optimizeDeps: {
+        include: ["react", "react-dom", "@tanstack/react-query"],
+    },
 });

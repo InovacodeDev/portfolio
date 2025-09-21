@@ -10,7 +10,7 @@ export const HeroSection: React.FC = () => {
     const buttonsAnimation = useSectionAnimation(3);
 
     return (
-        <section className="hero-section">
+        <section id="home" className="hero-section" aria-label="Seção principal">
             <div className="container">
                 <motion.div
                     className="hero-content"

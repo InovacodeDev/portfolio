@@ -82,7 +82,7 @@ export const ContactSection: React.FC = () => {
     }
 
     return (
-        <section className="contact-section">
+        <section id="contact" className="contact-section" aria-label="Formulário de contato">
             <div className="container">
                 <motion.div
                     className="section-header"

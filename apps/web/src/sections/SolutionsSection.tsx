@@ -33,7 +33,7 @@ export const SolutionsSection: React.FC = () => {
     const cardAnimations = [card1Animation, card2Animation, card3Animation];
 
     return (
-        <section className="solutions-section">
+        <section id="services" className="solutions-section" aria-label="Nossos serviços">
             <div className="container">
                 <motion.div
                     className="section-header"

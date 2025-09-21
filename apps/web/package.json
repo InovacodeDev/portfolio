@@ -13,10 +13,12 @@
     "dependencies": {
         "@hookform/resolvers": "^5.2.2",
         "@tanstack/react-query": "^5.89.0",
+        "@types/react-helmet-async": "^1.0.3",
         "axios": "latest",
         "framer-motion": "^12.23.16",
         "react": "latest",
         "react-dom": "latest",
+        "react-helmet-async": "^2.0.5",
         "react-hook-form": "^7.63.0",
         "zod": "^4.1.11"
     },
