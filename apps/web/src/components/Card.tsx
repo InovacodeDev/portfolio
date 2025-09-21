@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface CardProps {
     children: React.ReactNode;
@@ -13,29 +13,22 @@ export const Card: React.FC<CardProps> = ({
     children,
     title,
     subtitle,
-    className = '',
+    className = "",
     onClick,
     hoverable = true,
     ...props
 }) => {
-    const baseClasses = 'card';
-    const hoverClasses = hoverable ? 'card-hoverable' : '';
-    const clickableClasses = onClick ? 'card-clickable' : '';
-    
-    const classes = [
-        baseClasses,
-        hoverClasses,
-        clickableClasses,
-        className
-    ].filter(Boolean).join(' ');
+    const baseClasses = "card";
+    const hoverClasses = hoverable ? "card-hoverable" : "";
+    const clickableClasses = onClick ? "card-clickable" : "";
+
+    const classes = [baseClasses, hoverClasses, clickableClasses, className].filter(Boolean).join(" ");
 
     const CardContent = () => (
         <>
             {title && <h3 className="card-title">{title}</h3>}
             {subtitle && <p className="card-subtitle">{subtitle}</p>}
-            <div className="card-content">
-                {children}
-            </div>
+            <div className="card-content">{children}</div>
         </>
     );
 
@@ -47,7 +40,7 @@ export const Card: React.FC<CardProps> = ({
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === "Enter" || e.key === " ") {
                         onClick();
                     }
                 }}
