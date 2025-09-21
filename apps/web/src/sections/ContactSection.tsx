@@ -1,92 +1,64 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card } from "../components";
 import { useSectionAnimation } from "../hooks/useScrollAnimation";
-
-interface FormData {
-    name: string;
-    email: string;
-    message: string;
-}
-
-interface FormErrors {
-    name?: string;
-    email?: string;
-    message?: string;
-}
+import { useSubmitContact } from "../hooks/useApi";
+import { contactFormSchema, ContactFormData } from "../lib/schemas";
+import { ApiError } from "../lib/api";
 
 export const ContactSection: React.FC = () => {
-    const [formData, setFormData] = useState<FormData>({
-        name: "",
-        email: "",
-        message: "",
-    });
-
-    const [errors, setErrors] = useState<FormErrors>({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-
     const headerAnimation = useSectionAnimation(0);
     const formAnimation = useSectionAnimation(1);
     const successAnimation = useSectionAnimation(0);
 
-    const validateEmail = (email: string): boolean => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+    // Configurar react-hook-form com validação Zod
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+        setError,
+    } = useForm<ContactFormData>({
+        resolver: zodResolver(contactFormSchema),
+        mode: "onChange",
+    });
+
+    // Hook para submissão do formulário
+    const submitContactMutation = useSubmitContact({
+        onSuccess: (data) => {
+            console.log("Mensagem enviada com sucesso:", data);
+            reset(); // Limpar formulário após sucesso
+        },
+        onError: (error: ApiError) => {
+            console.error("Erro ao enviar mensagem:", error);
+
+            // Definir erro no formulário para exibir feedback
+            if (error.status === 400) {
+                setError("root", {
+                    message: error.data?.message || "Dados inválidos. Verifique os campos e tente novamente.",
+                });
+            } else {
+                setError("root", {
+                    message: error.message || "Erro interno do servidor. Tente novamente mais tarde.",
+                });
+            }
+        },
+    });
+
+    // Handler para submissão do formulário
+    const onSubmit = (data: ContactFormData) => {
+        submitContactMutation.mutate(data);
     };
 
-    const validateForm = (): boolean => {
-        const newErrors: FormErrors = {};
+    // Estado de loading e sucesso
+    const isSubmitting = submitContactMutation.isPending;
+    const isSubmitted = submitContactMutation.isSuccess;
 
-        if (!formData.name.trim()) {
-            newErrors.name = "Nome é obrigatório";
-        }
-
-        if (!formData.email.trim()) {
-            newErrors.email = "Email é obrigatório";
-        } else if (!validateEmail(formData.email)) {
-            newErrors.email = "Por favor, insira um email válido";
-        }
-
-        if (!formData.message.trim()) {
-            newErrors.message = "Mensagem é obrigatória";
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
-        setIsSubmitting(true);
-
-        try {
-            // Simulação de envio - será substituído pela integração real
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            console.log("Form submitted:", formData);
-            setIsSubmitted(true);
-            setFormData({ name: "", email: "", message: "" });
-        } catch (error) {
-            console.error("Error submitting form:", error);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-
-        // Clear error when user starts typing
-        if (errors[name as keyof FormErrors]) {
-            setErrors((prev) => ({ ...prev, [name]: undefined }));
-        }
+    // Função para resetar o estado de sucesso
+    const resetSuccess = () => {
+        submitContactMutation.reset();
     };
 
     if (isSubmitted) {
@@ -101,7 +73,7 @@ export const ContactSection: React.FC = () => {
                         <Card className="contact-success">
                             <h2>Mensagem Enviada!</h2>
                             <p>Obrigado pelo seu contato. Retornaremos em breve!</p>
-                            <Button onClick={() => setIsSubmitted(false)}>Enviar Nova Mensagem</Button>
+                            <Button onClick={resetSuccess}>Enviar Nova Mensagem</Button>
                         </Card>
                     </motion.div>
                 </div>
@@ -127,7 +99,7 @@ export const ContactSection: React.FC = () => {
                 <div className="contact-content">
                     <motion.div ref={formAnimation.ref} initial={formAnimation.initial} animate={formAnimation.animate}>
                         <Card className="contact-form-card">
-                            <form onSubmit={handleSubmit} className="contact-form">
+                            <form onSubmit={handleSubmit(onSubmit)} className="contact-form">
                                 <div className="form-group">
                                     <label htmlFor="name" className="form-label">
                                         Nome
@@ -135,13 +107,11 @@ export const ContactSection: React.FC = () => {
                                     <input
                                         type="text"
                                         id="name"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
+                                        {...register("name")}
                                         className={`form-input ${errors.name ? "error" : ""}`}
                                         placeholder="Seu nome completo"
                                     />
-                                    {errors.name && <span className="error-message">{errors.name}</span>}
+                                    {errors.name && <span className="error-message">{errors.name.message}</span>}
                                 </div>
 
                                 <div className="form-group">
@@ -151,13 +121,11 @@ export const ContactSection: React.FC = () => {
                                     <input
                                         type="email"
                                         id="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
+                                        {...register("email")}
                                         className={`form-input ${errors.email ? "error" : ""}`}
                                         placeholder="seu@email.com"
                                     />
-                                    {errors.email && <span className="error-message">{errors.email}</span>}
+                                    {errors.email && <span className="error-message">{errors.email.message}</span>}
                                 </div>
 
                                 <div className="form-group">
@@ -166,15 +134,16 @@ export const ContactSection: React.FC = () => {
                                     </label>
                                     <textarea
                                         id="message"
-                                        name="message"
-                                        value={formData.message}
-                                        onChange={handleChange}
+                                        {...register("message")}
                                         className={`form-textarea ${errors.message ? "error" : ""}`}
                                         placeholder="Conte-nos sobre seu projeto..."
                                         rows={5}
                                     />
-                                    {errors.message && <span className="error-message">{errors.message}</span>}
+                                    {errors.message && <span className="error-message">{errors.message.message}</span>}
                                 </div>
+
+                                {/* Erro geral do formulário */}
+                                {errors.root && <div className="error-message text-center">{errors.root.message}</div>}
 
                                 <Button type="submit" disabled={isSubmitting} className="form-submit">
                                     {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
