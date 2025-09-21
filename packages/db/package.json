@@ -3,9 +3,19 @@
     "version": "0.0.0",
     "private": true,
     "main": "schema.ts",
-    "devDependencies": {
+    "scripts": {
+        "generate": "drizzle-kit generate",
+        "migrate": "drizzle-kit migrate",
+        "push": "drizzle-kit push",
+        "studio": "drizzle-kit studio"
+    },
+    "dependencies": {
         "drizzle-orm": "latest",
+        "postgres": "latest"
+    },
+    "devDependencies": {
         "drizzle-kit": "latest",
+        "@types/pg": "latest",
         "typescript": "latest"
     }
 }
