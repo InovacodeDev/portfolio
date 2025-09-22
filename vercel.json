@@ -1,7 +1,7 @@
 {
     "version": 2,
-    "buildCommand": "turbo run build --filter=@shop-wise/web",
-    "outputDirectory": "dist",
+    "buildCommand": "turbo run build --filter=@inovacode/web",
+    "outputDirectory": "apps/web/dist",
     "framework": null,
     "env": {
         "SERVERLESS": "true"
@@ -18,7 +18,7 @@
         },
         {
             "source": "/(.*)",
-            "destination": "/apps/web/$1"
+            "destination": "/$1"
         }
     ]
 }
