@@ -1,18 +1,8 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "apps/api/api/index.js",
-            "use": "@vercel/node"
-        },
-        {
-            "src": "apps/web/package.json",
-            "use": "@vercel/static-build",
-            "config": {
-                "distDir": "dist"
-            }
-        }
-    ],
+    "buildCommand": "turbo run build --filter=@shop-wise/web",
+    "outputDirectory": "dist",
+    "framework": null,
     "env": {
         "SERVERLESS": "true"
     },

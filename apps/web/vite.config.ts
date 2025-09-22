@@ -5,7 +5,7 @@ export default defineConfig({
     plugins: [react()],
     server: {
         port: 5173,
-        host: true, // Permite conexões externas
+        host: "127.0.0.1", // Force IPv4 binding to match API target
         strictPort: false, // Permite porta alternativa se ocupada
         cors: true, // Habilita CORS
         // Proxy API requests during local development to the backend running on port 3001
@@ -23,7 +23,7 @@ export default defineConfig({
     // Ensure preview (the static preview server, e.g. `vite preview`) also proxies `/api`
     preview: {
         port: 3000,
-        host: true,
+        host: "127.0.0.1", // Force IPv4 binding for preview as well
         proxy: {
             "/api": {
                 // Use explicit IPv4 loopback for preview server as well
