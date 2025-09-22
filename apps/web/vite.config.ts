@@ -5,8 +5,10 @@ export default defineConfig({
     plugins: [react()],
     server: {
         port: 5173,
-        host: "0.0.0.0",
-        strictPort: true,
+        host: true, // Permite conexões externas
+        strictPort: false, // Permite porta alternativa se ocupada
+        cors: true, // Habilita CORS
+        open: false, // Não abre browser automaticamente
     },
     build: {
         // Otimizações para produção
