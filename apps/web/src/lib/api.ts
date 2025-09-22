@@ -1,6 +1,6 @@
 import { ContactFormData, ContactResponse, ContactError } from "./schemas";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 // Classe de erro personalizada para erros da API
 export class ApiError extends Error {
