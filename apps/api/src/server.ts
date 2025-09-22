@@ -2,7 +2,6 @@ import { config } from "dotenv";
 import path from "path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import fastifyCookie from "@fastify/cookie";
 import { serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { contactRoutes } from "./routes/contact";
@@ -58,11 +57,9 @@ export function buildServer() {
         credentials: true,
     });
 
-    // Register cookie plugin for session and rate-limiting support
-    server.register(fastifyCookie, {
-        secret: process.env.COOKIE_SECRET || "dev-secret", // for signed cookies if desired
-        parseOptions: {},
-    });
+    // NOTE: cookie plugin removed to avoid plugin-version mismatch between
+    // @fastify/cookie and Fastify runtime. Cookies are parsed/serialized
+    // manually in routes (see contact route preHandler).
 
     // Health check endpoint with proper response schema
     server.get(
