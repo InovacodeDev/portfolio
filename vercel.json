@@ -1,12 +1,18 @@
 {
-    "buildCommand": "cd ../.. && pnpm turbo build --filter=@inovacode/web",
+    "buildCommand": "turbo run build --filter=@inovacode/web",
     "outputDirectory": "dist",
-    "installCommand": "cd ../.. && pnpm install",
     "rootDirectory": "apps/web",
+    "env": {
+        "SERVERLESS": "true"
+    },
     "rewrites": [
         {
             "source": "/(.*)",
             "destination": "/index.html"
+        },
+        {
+            "source": "/api/(.*)",
+            "destination": "/api"
         }
     ],
     "headers": [
