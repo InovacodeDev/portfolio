@@ -58,8 +58,8 @@ export const PortfolioSection: React.FC = () => {
     const currentItem = portfolioItems[currentIndex];
 
     return (
-        <section id="portfolio" className="portfolio-section" aria-label="Seção de portfolio">
-            <div className="container">
+        <section id="portfolio" className="portfolio-section portfolio-fullscreen" aria-label="Seção de portfolio">
+            <div className="container portfolio-container">
                 <motion.div
                     className="section-header"
                     initial={{ opacity: 0, y: 30 }}
@@ -74,8 +74,8 @@ export const PortfolioSection: React.FC = () => {
                     </p>
                 </motion.div>
 
-                <div className="portfolio-carousel">
-                    <div className="carousel-container">
+                <div className="portfolio-carousel portfolio-carousel-fullscreen">
+                    <div className="carousel-container carousel-container-fullscreen">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={currentItem.id}
@@ -85,8 +85,8 @@ export const PortfolioSection: React.FC = () => {
                                 exit={{ opacity: 0, x: -300 }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                             >
-                                <div className="portfolio-content">
-                                    <div className="portfolio-image">
+                                <div className="portfolio-content portfolio-content-fullscreen">
+                                    <div className="portfolio-image portfolio-image-fullscreen">
                                         <img
                                             src={currentItem.image}
                                             alt={currentItem.title}
@@ -103,7 +103,7 @@ export const PortfolioSection: React.FC = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="portfolio-info">
+                                    <div className="portfolio-info portfolio-info-fullscreen">
                                         <h3>{currentItem.title}</h3>
                                         <p>{currentItem.description}</p>
                                         <div className="portfolio-tags">
