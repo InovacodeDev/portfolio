@@ -1,5 +1,5 @@
 {
-    "buildCommand": "turbo run build --filter=@portfolio/web",
+    "buildCommand": "turbo run build --filter=@inovacode/web",
     "outputDirectory": "dist",
     "framework": null,
     "functions": {
