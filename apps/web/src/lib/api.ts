@@ -1,6 +1,13 @@
 import { ContactFormData, ContactResponse, ContactError } from "./schemas";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || "";
+
+function buildUrl(path: string) {
+    // ensure no double slashes and support empty base for same-origin (Vercel)
+    const base = API_BASE_URL.replace(/\/$/, "");
+    if (!base) return path;
+    return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
+}
 
 // Classe de erro personalizada para erros da API
 export class ApiError extends Error {
@@ -19,7 +26,7 @@ export const apiClient = {
     // Submeter formulário de contato
     async submitContact(data: ContactFormData): Promise<ContactResponse> {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/v1/contact`, {
+            const response = await fetch(buildUrl("/api/v1/contact"), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -47,7 +54,7 @@ export const apiClient = {
     // Health check do servidor
     async healthCheck(): Promise<{ status: string; database: string }> {
         try {
-            const response = await fetch(`${API_BASE_URL}/healthz`);
+            const response = await fetch(buildUrl("/healthz"));
             const data = await response.json();
 
             if (!response.ok) {
