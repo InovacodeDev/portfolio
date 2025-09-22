@@ -11,6 +11,8 @@
     },
     "dependencies": {
         "@fastify/cors": "^11.1.0",
+        "@fastify/cookie": "^7.0.0",
+        "ioredis": "^5.3.2",
         "@inovacode/db": "workspace:*",
         "dotenv": "latest",
         "drizzle-orm": "^0.44.5",

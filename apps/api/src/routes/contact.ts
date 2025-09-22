@@ -1,4 +1,5 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import crypto from "crypto";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { drizzle } from "drizzle-orm/postgres-js";
@@ -110,8 +111,67 @@ export async function sendEmailNotificationResend(
     }
 }
 
+declare module "fastify" {
+    interface FastifyRequest {
+        sessionId?: string;
+    }
+}
+
 export async function contactRoutes(fastify: FastifyInstance) {
     const server = fastify.withTypeProvider<ZodTypeProvider>();
+
+    // Simple in-memory store to track last submission timestamp per session id
+    // NOTE: In a multi-instance production environment this should be replaced
+    // with a shared store (Redis, database, etc.). For Vercel serverless it's
+    // best-effort; we'll use a cookie-based session id plus the in-memory Map
+    // to protect against rapid repeated submissions from the same client.
+    const submissionTimestamps = new Map<string, number>();
+    // Lazy import for redis helper (optional)
+    let safeSetRateLimit: ((sessionId: string, ttlSeconds?: number) => Promise<boolean>) | null = null;
+    if (process.env.REDIS_URL) {
+        try {
+            // dynamic import to avoid requiring ioredis when not used
+            const redisMod = require("../lib/redis") as typeof import("../lib/redis");
+            safeSetRateLimit = redisMod.safeSetRateLimit;
+        } catch (err) {
+            server.log.warn(err, "Failed to load redis client; falling back to in-memory rate limiter");
+            safeSetRateLimit = null;
+        }
+    }
+
+    // Middleware to ensure session cookie exists and attach sessionId to request
+    // helper to generate a short random id
+    function cryptoRandomId() {
+        return crypto.randomBytes(16).toString("hex");
+    }
+
+    server.addHook("preHandler", async (request: FastifyRequest, reply: FastifyReply) => {
+        try {
+            const cookieName = "session_id";
+            // @ts-ignore: Fastify augmented types from @fastify/cookie
+            let sessionId = (request.cookies as Record<string, string> | undefined)?.[cookieName];
+
+            if (!sessionId) {
+                // create a simple random session id
+                sessionId = cryptoRandomId();
+                // set cookie for 7 days
+                // @ts-ignore: setCookie is provided by @fastify/cookie
+                reply.setCookie(cookieName, sessionId, {
+                    path: "/",
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "lax",
+                    maxAge: 60 * 60 * 24 * 7,
+                });
+            }
+
+            // attach to request for handlers to use
+            // @ts-ignore - extend request object dynamically
+            request.sessionId = sessionId;
+        } catch (err) {
+            server.log.warn(err, "Failed to ensure session cookie");
+        }
+    });
 
     // ...existing code...
 
@@ -128,9 +188,46 @@ export async function contactRoutes(fastify: FastifyInstance) {
                 },
             },
         },
-        async (request, reply) => {
+        async (request: FastifyRequest, reply: FastifyReply) => {
             try {
-                const { name, email, message } = request.body;
+                // request.body is validated by the route schema; cast to known shape
+                const body = request.body as { name: string; email: string; message: string };
+                const { name, email, message } = body;
+                const sessionId: string | undefined = request.sessionId;
+                const now = Date.now();
+
+                // Rate limiting: prefer Redis if configured, otherwise fallback to in-memory Map
+                if (sessionId) {
+                    if (safeSetRateLimit) {
+                        // safeSetRateLimit returns true when allowed (key set), false when already exists
+                        const allowed = await safeSetRateLimit(sessionId, 60);
+                        if (!allowed) {
+                            server.log.info({ sessionId }, "Rate limit: submission blocked (redis)");
+                            reply.code(429).send({
+                                error: "Too many requests",
+                                message: "Você pode enviar apenas uma mensagem por minuto.",
+                                timestamp: new Date().toISOString(),
+                            });
+                            return;
+                        }
+                    } else {
+                        const last = submissionTimestamps.get(sessionId) || 0;
+                        const diff = now - last;
+                        if (diff < 60 * 1000) {
+                            server.log.info({ sessionId }, "Rate limit: submission blocked");
+                            reply.code(429).send({
+                                error: "Too many requests",
+                                message: "Você pode enviar apenas uma mensagem por minuto.",
+                                timestamp: new Date().toISOString(),
+                            });
+                            return;
+                        }
+                        // record timestamp
+                        submissionTimestamps.set(sessionId, now);
+                        // schedule cleanup after 2 minutes to prevent memory leak
+                        setTimeout(() => submissionTimestamps.delete(sessionId), 2 * 60 * 1000);
+                    }
+                }
                 const db = getDb();
 
                 // Log da tentativa de submissão

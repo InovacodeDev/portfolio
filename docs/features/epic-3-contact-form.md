@@ -138,8 +138,18 @@ export const contacts = pgTable("contacts", {
 1. **Testes automatizados**: Unit tests para API e components
 2. **E2E Testing**: Cypress para fluxo completo
 3. **Validações adicionais**: Rate limiting, sanitização
-4. **Dashboard admin**: Interface para visualizar contatos
-5. **Notificações**: Email/SMS para novos contatos
+4. **Serverless deployment**: Add a Vercel handler to run the API as a Serverless Function. See `apps/api/src/vercel.ts`.
+5. **Rate limiting implemented**: The API now sets a `session_id` cookie and blocks additional contact submissions from the same session for 1 minute.
+
+### Production-ready Redis rate limiting
+
+To enable robust rate limiting across server instances (recommended for production), configure a Redis instance and set `REDIS_URL` in your environment. The API will automatically use Redis to atomically ensure a single submission per session per minute. Example:
+
+```
+REDIS_URL=redis://:password@redis-host:6379
+```
+
+The code uses `ioredis` and an atomic `SET key value NX EX 60` command. If Redis is unavailable, the server falls back to an in-memory Map (best-effort). 6. **Dashboard admin**: Interface para visualizar contatos 7. **Notificações**: Email/SMS para novos contatos
 
 ## Conclusão
 
