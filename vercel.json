@@ -6,12 +6,12 @@
     },
     "rewrites": [
         {
-            "source": "/(.*)",
-            "destination": "/index.html"
+            "source": "/api/(.*)",
+            "destination": "apps/api/api/$1"
         },
         {
-            "source": "/api/(.*)",
-            "destination": "/api/api"
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ],
     "headers": [

@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "http";
-import { buildServer } from "../src/server";
+import { buildServer } from "../../src/server";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
     const server = await buildServer();
