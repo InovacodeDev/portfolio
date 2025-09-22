@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Req, Res, Body, HttpCode } from "@nestjs/common";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { Request, Response } from "express";
 import { ContactService } from "../services/contact.service";
 
 @Controller("/api/v1")
@@ -18,12 +18,12 @@ export class ContactController {
 
     @Post("/contact")
     @HttpCode(201)
-    async submitContact(@Req() req: FastifyRequest, @Res() res: FastifyReply, @Body() body: any) {
+    async submitContact(@Req() req: Request, @Res() res: Response, @Body() body: unknown) {
         return this.contactService.handleContact(body, req, res);
     }
 
     @Get("/contacts")
-    async listContacts(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    async listContacts(@Req() req: Request, @Res() res: Response) {
         return this.contactService.listContacts(req, res);
     }
 }

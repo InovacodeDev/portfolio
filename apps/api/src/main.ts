@@ -2,31 +2,14 @@ import "reflect-metadata";
 import { config } from "dotenv";
 import path from "path";
 import { NestFactory } from "@nestjs/core";
-import type { NestFastifyApplication } from "@nestjs/platform-fastify";
-import { FastifyAdapter } from "@nestjs/platform-fastify";
 import { AppModule } from "./app.module";
 
 // Load environment variables from .env.local in project root
 config({ path: path.resolve(__dirname, "../../../.env.local") });
 
 async function bootstrap() {
-    // Create Nest app with Fastify adapter
-    const app = await NestFactory.create<NestFastifyApplication>(
-        AppModule,
-        new FastifyAdapter({
-            logger: {
-                level: "info",
-                transport: {
-                    target: "pino-pretty",
-                    options: {
-                        colorize: true,
-                        translateTime: "HH:MM:ss Z",
-                        ignore: "pid,hostname",
-                    },
-                },
-            },
-        })
-    );
+    // Create Nest app with default Express adapter for better Vercel compatibility
+    const app = await NestFactory.create(AppModule);
 
     // Enable CORS
     app.enableCors({

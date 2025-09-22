@@ -7,7 +7,7 @@ import { contacts, Contact } from "@inovacode/db";
 import * as schema from "@inovacode/db/schema";
 import Resend from "resend";
 import { renderContactNotification } from "../lib/emailTemplates";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { Request, Response } from "express";
 
 const contactRequestSchema = z.object({
     name: z.string().min(1).max(255),
@@ -123,13 +123,13 @@ export class ContactService {
         return cookies;
     }
 
-    async handleContact(body: any, req: FastifyRequest, reply: FastifyReply) {
+    async handleContact(body: unknown, req: Request, reply: Response) {
         try {
             const parsed = contactRequestSchema.parse(body);
             const { name, email, message } = parsed;
 
             // ensure session id cookie
-            const cookieHeader = (req.headers && (req.headers as Record<string, string>)["cookie"]) || "";
+            const cookieHeader = req.headers["cookie"] || "";
             const cookies = this.parseCookies(cookieHeader);
             let sessionId = cookies["session_id"];
             if (!sessionId) {
@@ -147,14 +147,14 @@ export class ContactService {
                 const prev = reply.getHeader("Set-Cookie");
                 if (prev) {
                     if (Array.isArray(prev)) {
-                        reply.header("Set-Cookie", [...prev, parts.join("; ")]);
+                        reply.setHeader("Set-Cookie", [...prev, parts.join("; ")]);
                     } else if (typeof prev === "string") {
-                        reply.header("Set-Cookie", [prev, parts.join("; ")]);
+                        reply.setHeader("Set-Cookie", [prev, parts.join("; ")]);
                     } else {
-                        reply.header("Set-Cookie", parts.join("; "));
+                        reply.setHeader("Set-Cookie", parts.join("; "));
                     }
                 } else {
-                    reply.header("Set-Cookie", parts.join("; "));
+                    reply.setHeader("Set-Cookie", parts.join("; "));
                 }
             }
 
@@ -163,13 +163,11 @@ export class ContactService {
             // Rate limiting - prefer redis if available (not implemented here), fallback to in-memory
             const last = this.submissionTimestamps.get(sessionId) || 0;
             if (now - last < 60 * 1000) {
-                reply
-                    .code(429)
-                    .send({
-                        error: "Too many requests",
-                        message: "Você pode enviar apenas uma mensagem por minuto.",
-                        timestamp: new Date().toISOString(),
-                    });
+                reply.status(429).json({
+                    error: "Too many requests",
+                    message: "Você pode enviar apenas uma mensagem por minuto.",
+                    timestamp: new Date().toISOString(),
+                });
                 return;
             }
             this.submissionTimestamps.set(sessionId, now);
@@ -210,36 +208,30 @@ export class ContactService {
                 sendEmailNotificationResend({ name, email, message, contactId }).catch((err) => console.error(err));
             }
 
-            reply
-                .code(201)
-                .send({
-                    id: contactId,
-                    message: "Mensagem enviada com sucesso! Entraremos em contato em breve.",
-                    timestamp: new Date().toISOString(),
-                });
+            reply.status(201).json({
+                id: contactId,
+                message: "Mensagem enviada com sucesso! Entraremos em contato em breve.",
+                timestamp: new Date().toISOString(),
+            });
         } catch (error) {
             console.error(error, "Error processing contact form submission");
             if (error instanceof Error && error.message.includes("duplicate")) {
-                reply
-                    .code(400)
-                    .send({
-                        error: "Duplicate submission",
-                        message: "Esta mensagem já foi enviada recentemente.",
-                        timestamp: new Date().toISOString(),
-                    });
-                return;
-            }
-            reply
-                .code(500)
-                .send({
-                    error: "Internal server error",
-                    message: "Erro interno do servidor. Tente novamente mais tarde.",
+                reply.status(400).json({
+                    error: "Duplicate submission",
+                    message: "Esta mensagem já foi enviada recentemente.",
                     timestamp: new Date().toISOString(),
                 });
+                return;
+            }
+            reply.status(500).json({
+                error: "Internal server error",
+                message: "Erro interno do servidor. Tente novamente mais tarde.",
+                timestamp: new Date().toISOString(),
+            });
         }
     }
 
-    async listContacts(_req: FastifyRequest, reply: FastifyReply) {
+    async listContacts(_req: Request, reply: Response) {
         try {
             const db = getDb();
             const allContacts = await db.select().from(contacts).orderBy(contacts.createdAt);
@@ -249,16 +241,14 @@ export class ContactService {
                 createdAt: contact.createdAt.toISOString(),
                 updatedAt: contact.updatedAt.toISOString(),
             }));
-            reply.send(formattedContacts);
+            reply.json(formattedContacts);
         } catch (error) {
             console.error(error, "Error fetching contacts");
-            reply
-                .code(500)
-                .send({
-                    error: "Internal server error",
-                    message: "Erro ao buscar contatos.",
-                    timestamp: new Date().toISOString(),
-                });
+            reply.status(500).json({
+                error: "Internal server error",
+                message: "Erro ao buscar contatos.",
+                timestamp: new Date().toISOString(),
+            });
         }
     }
 }

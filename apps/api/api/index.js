@@ -1,16 +1,19 @@
 const { NestFactory } = require("@nestjs/core");
-const { FastifyAdapter } = require("@nestjs/platform-fastify");
 const { AppModule } = require("../dist/app.module");
 
 let app;
 
 module.exports = async (req, res) => {
     if (!app) {
-        app = await NestFactory.create(AppModule, new FastifyAdapter());
+        app = await NestFactory.create(AppModule);
 
         app.enableCors({
             origin: (origin, callback) => {
-                const allowedOrigins = ["https://inovacode.vercel.app", process.env.FRONTEND_URL].filter(Boolean);
+                const allowedOrigins = [
+                    "https://inovacode.vercel.app",
+                    "https://www.inovacode.dev",
+                    process.env.FRONTEND_URL,
+                ].filter(Boolean);
                 if (!origin) return callback(null, true);
                 try {
                     const hostname = new URL(origin).hostname;
@@ -29,6 +32,6 @@ module.exports = async (req, res) => {
         await app.init();
     }
 
-    const fastifyInstance = app.getHttpAdapter().getInstance();
-    fastifyInstance.server.emit("request", req, res);
+    const expressInstance = app.getHttpAdapter().getInstance();
+    return expressInstance(req, res);
 };
