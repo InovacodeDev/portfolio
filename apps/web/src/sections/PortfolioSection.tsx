@@ -42,6 +42,8 @@ const portfolioItems: PortfolioItem[] = [
 
 export const PortfolioSection: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+    const carouselRef = React.useRef<HTMLDivElement | null>(null);
 
     const nextSlide = () => {
         setCurrentIndex((prevIndex) => (prevIndex === portfolioItems.length - 1 ? 0 : prevIndex + 1));
@@ -56,6 +58,27 @@ export const PortfolioSection: React.FC = () => {
     };
 
     const currentItem = portfolioItems[currentIndex];
+
+    // Avança automaticamente o slide a cada 6s, pausa quando `isPaused` é true
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            if (!isPaused) nextSlide();
+        }, 6000);
+        return () => clearInterval(interval);
+    }, [isPaused]);
+
+    // Suporte a teclado (setas esquerda/direita) — listener global ao window (limpo no unmount)
+    React.useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === "ArrowRight") nextSlide();
+            if (e.key === "ArrowLeft") prevSlide();
+        };
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, []);
+
+    const handleMouseEnter = () => setIsPaused(true);
+    const handleMouseLeave = () => setIsPaused(false);
 
     return (
         <section id="portfolio" className="portfolio-section portfolio-fullscreen" aria-label="Seção de portfolio">
@@ -75,15 +98,21 @@ export const PortfolioSection: React.FC = () => {
                 </motion.div>
 
                 <div className="portfolio-carousel portfolio-carousel-fullscreen">
-                    <div className="carousel-container carousel-container-fullscreen">
+                    <div
+                        className="carousel-container carousel-container-fullscreen"
+                        ref={carouselRef}
+                        tabIndex={0}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                    >
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={currentItem.id}
                                 className="portfolio-slide"
-                                initial={{ opacity: 0, x: 300 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -300 }}
-                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.98 }}
+                                transition={{ duration: 0.6, ease: "easeInOut" }}
                             >
                                 <div className="portfolio-content portfolio-content-fullscreen">
                                     <div className="portfolio-image portfolio-image-fullscreen">
@@ -152,7 +181,7 @@ export const PortfolioSection: React.FC = () => {
                                     </div>
                                     <div className="portfolio-info portfolio-info-fullscreen">
                                         <h3>{currentItem.title}</h3>
-                                        <p>{currentItem.description}</p>
+                                        <p aria-live="polite">{currentItem.description}</p>
                                         <div className="portfolio-tags">
                                             {currentItem.tags.map((tag, index) => (
                                                 <span key={index} className="tag">
@@ -169,7 +198,7 @@ export const PortfolioSection: React.FC = () => {
                         </AnimatePresence>
 
                         {/* Controles do Carrosel */}
-                        <div className="carousel-controls">
+                        <div className="carousel-controls" role="group" aria-label="Controles do carrossel">
                             <button
                                 className="carousel-btn carousel-btn-prev"
                                 onClick={prevSlide}
