@@ -51,6 +51,23 @@ export const Navigation: React.FC = () => {
                 </li>
                 <li>
                     <button
+                        onClick={() => scrollToSection("portfolio")}
+                        className="px-3 py-2 text-sm transition-colors"
+                        style={{
+                            color: "var(--color-text-primary)",
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent-primary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-primary)")}
+                        aria-label="Ir para seção de portfolio"
+                    >
+                        Portfolio
+                    </button>
+                </li>
+                <li>
+                    <button
                         onClick={() => scrollToSection("about")}
                         className="px-3 py-2 text-sm transition-colors"
                         style={{

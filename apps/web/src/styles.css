@@ -330,6 +330,150 @@ section {
     padding: 24px;
 }
 
+/* Portfolio Section */
+.portfolio-section {
+    background: linear-gradient(135deg, rgba(42, 42, 42, 0.5) 0%, rgba(30, 30, 30, 0.5) 100%);
+}
+
+.portfolio-carousel {
+    margin-top: 64px;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.portfolio-slide {
+    width: 100%;
+}
+
+.portfolio-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    background-color: var(--color-card-background);
+    border-radius: 16px;
+    padding: 48px;
+    min-height: 400px;
+}
+
+.portfolio-image {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: rgba(162, 185, 209, 0.1);
+}
+
+.portfolio-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.portfolio-image:hover img {
+    transform: scale(1.05);
+}
+
+.portfolio-info h3 {
+    margin-bottom: 16px;
+    color: var(--color-accent-primary);
+}
+
+.portfolio-info p {
+    margin-bottom: 24px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.portfolio-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.tag {
+    background-color: rgba(162, 185, 209, 0.2);
+    color: var(--color-accent-primary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Controles do Carrosel */
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.carousel-btn {
+    background-color: var(--color-accent-primary);
+    color: var(--color-background-start);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background-color: var(--color-accent-hover);
+    transform: scale(1.1);
+}
+
+.carousel-btn-prev {
+    left: -25px;
+}
+
+.carousel-btn-next {
+    right: -25px;
+}
+
+/* Indicadores */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(162, 185, 209, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background-color: var(--color-accent-primary);
+    transform: scale(1.2);
+}
+
+.indicator:hover {
+    background-color: var(--color-accent-hover);
+}
+
 /* Contact Section */
 .contact-content {
     max-width: 600px;
@@ -432,6 +576,31 @@ section {
         gap: 48px;
     }
 
+    .portfolio-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 32px;
+        text-align: center;
+    }
+
+    .portfolio-image img {
+        height: 200px;
+    }
+
+    .carousel-btn-prev {
+        left: -15px;
+    }
+
+    .carousel-btn-next {
+        right: -15px;
+    }
+
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
     .contact-form-card,
     .contact-success {
         padding: 32px 24px;
@@ -453,6 +622,24 @@ section {
 
     .solutions-grid {
         grid-template-columns: 1fr;
+    }
+
+    .portfolio-content {
+        padding: 24px;
+    }
+
+    .carousel-btn-prev {
+        left: -10px;
+    }
+
+    .carousel-btn-next {
+        right: -10px;
+    }
+
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
     }
 
     h1 {
