@@ -1,9 +1,7 @@
 {
-    "framework": "vite",
-    "buildCommand": "cd apps/web && pnpm build",
+    "buildCommand": "pnpm turbo build --filter=@inovacode/web",
     "outputDirectory": "apps/web/dist",
     "installCommand": "pnpm install",
-    "devCommand": "cd apps/web && pnpm dev",
     "rewrites": [
         {
             "source": "/(.*)",
