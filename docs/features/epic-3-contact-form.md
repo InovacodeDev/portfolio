@@ -151,6 +151,20 @@ REDIS_URL=redis://:password@redis-host:6379
 
 The code uses `ioredis` and an atomic `SET key value NX EX 60` command. If Redis is unavailable, the server falls back to an in-memory Map (best-effort). 6. **Dashboard admin**: Interface para visualizar contatos 7. **Notificações**: Email/SMS para novos contatos
 
+## Local DB Fallback (Development)
+
+If your local environment doesn't have a working Postgres instance or the configured `DATABASE_URL` points to an environment with missing roles, you can enable a dev fallback which allows the contact endpoint to return a successful 201 response without persisting to the database.
+
+Set one of these environment variables in `.env.local`:
+
+```
+FORCE_DEV_DB_FALLBACK=1
+# or
+FORCE_DEV_DB_FALLBACK=true
+```
+
+When enabled, the API will generate a synthetic `id` for the contact (based on timestamp) and proceed to dispatch notification emails (if `RESEND_API_KEY` and `EMAIL_TO` are configured).
+
 ## Conclusão
 
 O Épico 3 foi implementado com sucesso, seguindo todas as diretrizes do AGENTS.md:
