@@ -1,7 +1,7 @@
 {
-    "buildCommand": "cd ../.. && pnpm turbo build --filter=@inovacode/web",
+    "buildCommand": "pnpm turbo build --filter=@inovacode/web",
     "outputDirectory": "apps/web/dist",
-    "installCommand": "cd ../.. && pnpm install",
+    "installCommand": "pnpm install",
     "rewrites": [
         {
             "source": "/(.*)",
