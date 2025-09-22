@@ -2,9 +2,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "../components";
 
-export const HeroSection: React.FC = () => {
-    console.log("HeroSection renderizando...");
+import Logo from "../assets/inovacode_logo_text_white.png";
 
+export const HeroSection: React.FC = () => {
     return (
         <section id="home" className="hero-section" aria-label="Seção principal">
             <div className="container">
@@ -20,14 +20,20 @@ export const HeroSection: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
                         style={{
-                            fontSize: "20px",
-                            fontWeight: 600,
-                            color: "var(--color-accent-primary)",
                             marginBottom: "16px",
-                            letterSpacing: "2px",
+                            display: "flex",
+                            justifyContent: "center",
                         }}
                     >
-                        INOVACODE
+                        <img
+                            src={Logo}
+                            alt="INOVACODE"
+                            style={{
+                                height: "150px",
+                                width: "auto",
+                                maxWidth: "282px",
+                            }}
+                        />
                     </motion.div>
                     <motion.h1
                         className="hero-title"
