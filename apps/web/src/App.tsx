@@ -1,7 +1,7 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SEO, Navigation } from "./components";
-import { HeroSection, SolutionsSection, PortfolioSection, AboutSection, ContactSection } from "./sections";
+import { HeroSection, SolutionsSection, AboutSection, ContactSection } from "./sections";
 
 // Criar instância do QueryClient
 const queryClient = new QueryClient({
@@ -28,7 +28,7 @@ export default function App() {
             <main>
                 <HeroSection />
                 <SolutionsSection />
-                <PortfolioSection />
+                {/* <PortfolioSection /> */}
                 <AboutSection />
                 <ContactSection />
             </main>
