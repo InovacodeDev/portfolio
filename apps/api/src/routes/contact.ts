@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import crypto from "crypto";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
@@ -129,7 +128,7 @@ declare module "fastify" {
 }
 
 export async function contactRoutes(fastify: FastifyInstance) {
-    const server = fastify.withTypeProvider<ZodTypeProvider>();
+    const server = fastify;
 
     // Simple in-memory store to track last submission timestamp per session id
     // NOTE: In a multi-instance production environment this should be replaced

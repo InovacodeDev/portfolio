@@ -1,7 +1,18 @@
 {
-    "buildCommand": "turbo run build --filter=@inovacode/web",
-    "outputDirectory": "dist",
-    "framework": null,
+    "version": 2,
+    "builds": [
+        {
+            "src": "apps/api/api/index.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "apps/web/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
+        }
+    ],
     "env": {
         "SERVERLESS": "true"
     },
@@ -13,7 +24,11 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/api"
+            "destination": "/apps/api/api/index.js"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/apps/web/$1"
         }
     ]
 }

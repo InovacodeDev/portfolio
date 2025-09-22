@@ -9,7 +9,7 @@ const fs = require("fs");
 // developers to run `pnpm --filter @inovacode/api build` ensures the
 // function executes compiled JS and avoids ts-node runtime issues.
 let serverModule;
-const compiledPath = path.join(__dirname, "..", "dist", "server.js");
+const compiledPath = path.join(__dirname, "..", "dist", "vercel.js");
 try {
     if (fs.existsSync(compiledPath)) {
         serverModule = require(compiledPath);

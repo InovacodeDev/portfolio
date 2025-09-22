@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ES2021",
+        "module": "CommonJS",
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "declaration": true,
+        "strict": false,
+        "moduleResolution": "Node",
+        "skipLibCheck": true
+    },
+    "include": ["index.ts", "schema.ts"]
+}
