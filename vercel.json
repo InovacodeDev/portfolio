@@ -1,7 +1,6 @@
 {
     "buildCommand": "turbo run build --filter=@inovacode/web",
     "outputDirectory": "dist",
-    "rootDirectory": "apps/web",
     "env": {
         "SERVERLESS": "true"
     },
