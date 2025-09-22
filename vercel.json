@@ -1,25 +1,19 @@
 {
-    "version": 2,
-    "buildCommand": "turbo run build --filter=@inovacode/web",
-    "outputDirectory": "apps/web/dist",
-    "installCommand": "pnpm install",
+    "buildCommand": "turbo run build --filter=@portfolio/web",
+    "outputDirectory": "dist",
     "framework": null,
-    "env": {
-        "SERVERLESS": "true"
-    },
     "functions": {
         "apps/api/api/index.js": {
             "runtime": "nodejs20.x"
         }
     },
+    "env": {
+        "SERVERLESS": "true"
+    },
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/apps/api/api/index.js"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/$1"
+            "destination": "/api"
         }
     ]
 }

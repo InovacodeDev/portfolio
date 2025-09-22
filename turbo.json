@@ -1,61 +1,24 @@
 {
     "$schema": "https://turbo.build/schema.json",
+    "globalDependencies": [".env"],
     "tasks": {
         "build": {
-            "dependsOn": [
-                "^build"
-            ],
-            "outputs": [
-                "dist/**"
-            ],
-            "env": [
-                "DATABASE_POSTGRES_URL",
-                "DATABASE_POSTGRES_PRISMA_URL",
-                "DATABASE_SUPABASE_URL",
-                "DATABASE_POSTGRES_URL_NON_POOLING",
-                "DATABASE_SUPABASE_JWT_SECRET",
-                "DATABASE_POSTGRES_USER",
-                "DATABASE_POSTGRES_PASSWORD",
-                "DATABASE_POSTGRES_DATABASE",
-                "DATABASE_SUPABASE_SERVICE_ROLE_KEY",
-                "DATABASE_VITE_PUBLIC_SUPABASE_ANON_KEY",
-                "DATABASE_POSTGRES_HOST",
-                "DATABASE_SUPABASE_ANON_KEY",
-                "DATABASE_VITE_PUBLIC_SUPABASE_URL",
-                "API_PORT",
-                "DATABASE_URL",
-                "DOPPLER_CONFIG",
-                "DOPPLER_ENVIRONMENT",
-                "DOPPLER_PROJECT",
-                "EMAIL_FROM",
-                "EMAIL_TO",
-                "NODE_ENV",
-                "RESEND_API_KEY",
-                "SITE_LOGO_URL",
-                "SITE_URL",
-                "SERVERLESS"
-            ]
+            "dependsOn": ["^build"],
+            "outputs": ["dist/**", "build/**"]
         },
         "dev": {
-            "cache": false
+            "cache": false,
+            "persistent": true
         },
-        "lint": {
-            "dependsOn": [
-                "^lint"
-            ],
-            "outputs": []
+        "start": {
+            "dependsOn": ["build"]
         },
+        "lint": {},
         "test": {
-            "dependsOn": [
-                "^test"
-            ],
-            "outputs": []
+            "dependsOn": ["^build"]
         },
-        "type-check": {
-            "dependsOn": [
-                "^type-check"
-            ],
-            "outputs": []
+        "clean": {
+            "cache": false
         }
     }
 }
