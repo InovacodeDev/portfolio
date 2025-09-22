@@ -14,6 +14,17 @@ const getDb = () => {
     const connectionString = process.env.DATABASE_URL;
 
     if (!connectionString) {
+        const forceFallback =
+            String(process.env.FORCE_DEV_DB_FALLBACK || "").toLowerCase() === "1" ||
+            String(process.env.FORCE_DEV_DB_FALLBACK || "").toLowerCase() === "true";
+
+        if (forceFallback) {
+            // Return a dummy object that mimics the minimal subset used by the route
+            return {
+                insert: () => ({ values: () => ({ returning: async () => [{ id: Math.floor(Date.now() / 1000) }] }) }),
+            } as unknown as ReturnType<typeof drizzle>;
+        }
+
         throw new Error("DATABASE_URL environment variable is not set");
     }
 
