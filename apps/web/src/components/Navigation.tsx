@@ -10,14 +10,23 @@ export const Navigation: React.FC = () => {
 
     return (
         <nav
-            className="fixed top-4 right-4 z-50 bg-surface-container rounded-lg p-2 shadow-lg"
+            className="fixed top-4 right-4 z-50 card rounded-lg shadow-lg"
+            style={{ backgroundColor: "var(--color-card-background)" }}
             aria-label="Navegação principal"
         >
-            <ul className="flex flex-col space-y-2">
+            <ul className="flex flex-col gap-2" style={{ padding: "16px" }}>
                 <li>
                     <button
                         onClick={() => scrollToSection("home")}
-                        className="px-3 py-2 text-sm text-on-surface hover:text-primary transition-colors"
+                        className="px-3 py-2 text-sm transition-colors"
+                        style={{
+                            color: "var(--color-text-primary)",
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent-primary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-primary)")}
                         aria-label="Ir para seção inicial"
                     >
                         Início
@@ -26,7 +35,15 @@ export const Navigation: React.FC = () => {
                 <li>
                     <button
                         onClick={() => scrollToSection("services")}
-                        className="px-3 py-2 text-sm text-on-surface hover:text-primary transition-colors"
+                        className="px-3 py-2 text-sm transition-colors"
+                        style={{
+                            color: "var(--color-text-primary)",
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent-primary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-primary)")}
                         aria-label="Ir para seção de serviços"
                     >
                         Serviços
@@ -35,7 +52,15 @@ export const Navigation: React.FC = () => {
                 <li>
                     <button
                         onClick={() => scrollToSection("about")}
-                        className="px-3 py-2 text-sm text-on-surface hover:text-primary transition-colors"
+                        className="px-3 py-2 text-sm transition-colors"
+                        style={{
+                            color: "var(--color-text-primary)",
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent-primary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-primary)")}
                         aria-label="Ir para seção sobre nós"
                     >
                         Sobre
@@ -44,7 +69,15 @@ export const Navigation: React.FC = () => {
                 <li>
                     <button
                         onClick={() => scrollToSection("contact")}
-                        className="px-3 py-2 text-sm text-on-surface hover:text-primary transition-colors"
+                        className="px-3 py-2 text-sm transition-colors"
+                        style={{
+                            color: "var(--color-text-primary)",
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent-primary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-primary)")}
                         aria-label="Ir para seção de contato"
                     >
                         Contato
