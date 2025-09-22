@@ -31,7 +31,7 @@ export const HeroSection: React.FC = () => {
                             style={{
                                 height: "150px",
                                 width: "auto",
-                                maxWidth: "282px",
+                                maxWidth: "828px",
                             }}
                         />
                     </motion.div>
