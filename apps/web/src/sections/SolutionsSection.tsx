@@ -8,13 +8,13 @@ const solutions = [
         title: "Desenvolvimento Web",
         description:
             "Criamos aplicações web modernas e responsivas utilizando as mais recentes tecnologias do mercado.",
-        features: ["React & Next.js", "TypeScript", "Design Responsivo", "Performance Otimizada"],
+        features: ["React & Vite", "TypeScript", "Tailwind CSS", "Performance Otimizada"],
     },
     {
         title: "Aplicações Mobile",
         description:
             "Desenvolvemos apps nativos e híbridos que proporcionam experiências excepcionais em dispositivos móveis.",
-        features: ["React Native", "iOS & Android", "UX/UI Design", "Integração com APIs"],
+        features: ["React Native", "iOS & Android", "Expo", "Integração com APIs"],
     },
     {
         title: "Soluções Backend",
