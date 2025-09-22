@@ -49,7 +49,7 @@ export const Navigation: React.FC = () => {
                         Serviços
                     </button>
                 </li>
-                <li>
+                {/* <li>
                     <button
                         onClick={() => scrollToSection("portfolio")}
                         className="px-3 py-2 text-sm transition-colors"
@@ -65,7 +65,7 @@ export const Navigation: React.FC = () => {
                     >
                         Portfolio
                     </button>
-                </li>
+                </li> */}
                 <li>
                     <button
                         onClick={() => scrollToSection("about")}

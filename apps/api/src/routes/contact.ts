@@ -5,6 +5,8 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { contacts, Contact } from "@inovacode/db";
 import * as schema from "@inovacode/db/schema";
+import Resend from "resend";
+import { renderContactNotification } from "../lib/emailTemplates";
 
 // Helper para obter conexão com banco de dados
 const getDb = () => {
@@ -44,8 +46,74 @@ const errorResponseSchema = z.object({
     timestamp: z.string(),
 });
 
+// Minimal HTML escape for message body
+export const escapeHtml = (unsafe: string) => {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
+
+// Helper to send email notifications using Resend API
+export async function sendEmailNotificationResend(
+    opts: { name: string; email: string; message: string; contactId: number },
+    logger?: Partial<{
+        info: (...args: unknown[]) => void;
+        warn: (...args: unknown[]) => void;
+        error: (...args: unknown[]) => void;
+    }>
+) {
+    const { name, email, message, contactId } = opts;
+
+    const apiKey = process.env.RESEND_API_KEY;
+    const emailTo = process.env.EMAIL_TO;
+    const emailFrom = process.env.EMAIL_FROM || (emailTo ? emailTo.split(",")[0].trim() : "no-reply@localhost");
+
+    const log = logger ?? console;
+
+    if (!apiKey) {
+        log.warn?.("RESEND_API_KEY not set; skipping email notification");
+        return;
+    }
+
+    if (!emailTo) {
+        log.warn?.("EMAIL_TO not set; skipping email notification");
+        return;
+    }
+
+    try {
+        const resend = new Resend(apiKey);
+
+        const subject = `New contact form submission (#${contactId})`;
+        const plain = `New contact form submission\n\nID: ${contactId}\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n`;
+        const html = renderContactNotification({
+            contactId,
+            name,
+            email,
+            messageHtml: escapeHtml(message),
+            timestamp: new Date().toISOString(),
+        });
+
+        await resend.emails.send({
+            from: emailFrom,
+            to: emailTo.split(",").map((s) => s.trim()),
+            subject,
+            text: plain,
+            html,
+        });
+
+        log.info?.({ contactId }, "Email notification sent via Resend");
+    } catch (err) {
+        log.error?.(err, "Failed to send email notification via Resend");
+    }
+}
+
 export async function contactRoutes(fastify: FastifyInstance) {
     const server = fastify.withTypeProvider<ZodTypeProvider>();
+
+    // ...existing code...
 
     // Endpoint para submissão do formulário de contato
     server.post(
@@ -81,8 +149,10 @@ export async function contactRoutes(fastify: FastifyInstance) {
 
                 server.log.info({ contactId: newContact.id }, "Contact saved to database");
 
-                // TODO: Implementar notificação por email
-                // await sendEmailNotification({ name, email, message, contactId: newContact.id });
+                // Enviar notificação por email de forma assíncrona (não bloquear resposta)
+                sendEmailNotificationResend({ name, email, message, contactId: newContact.id }).catch((err) => {
+                    server.log.error(err, "Error sending contact notification email");
+                });
 
                 reply.code(201).send({
                     id: newContact.id,
