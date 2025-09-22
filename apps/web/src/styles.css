@@ -242,6 +242,37 @@ section {
     flex-wrap: wrap;
 }
 
+/* Hero Logo Responsivo */
+.hero-logo {
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (min-width: 1200px) {
+    .hero-logo {
+        max-height: 300px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .hero-logo {
+        max-height: 240px !important;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    .hero-logo {
+        max-height: 180px !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .hero-logo {
+        max-height: 120px !important;
+    }
+}
+
 /* Solutions Section */
 .solutions-grid {
     display: grid;

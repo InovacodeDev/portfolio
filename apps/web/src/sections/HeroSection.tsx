@@ -28,10 +28,12 @@ export const HeroSection: React.FC = () => {
                         <img
                             src={Logo}
                             alt="INOVACODE"
+                            className="hero-logo"
                             style={{
-                                height: "150px",
                                 width: "auto",
-                                maxWidth: "828px",
+                                maxWidth: "100%",
+                                height: "auto",
+                                maxHeight: "300px",
                             }}
                         />
                     </motion.div>
