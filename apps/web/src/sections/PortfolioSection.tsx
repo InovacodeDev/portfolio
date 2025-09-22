@@ -92,14 +92,61 @@ export const PortfolioSection: React.FC = () => {
                                             alt={currentItem.title}
                                             onError={(e) => {
                                                 const target = e.target as HTMLImageElement;
-                                                target.src = `data:image/svg+xml;base64,${btoa(`
-                                                    <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
-                                                        <rect width="100%" height="100%" fill="#2a2a2a"/>
-                                                        <text x="50%" y="50%" font-family="Inter, sans-serif" font-size="20" fill="#a2b9d1" text-anchor="middle" dy=".3em">
-                                                            ${currentItem.title}
-                                                        </text>
-                                                    </svg>
-                                                `)}`;
+                                                const svgContent =
+                                                    currentItem.id === 1
+                                                        ? `<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                                                        <defs>
+                                                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <rect width="100%" height="100%" fill="url(#grad1)"/>
+                                                        <rect x="50" y="80" width="500" height="240" rx="15" fill="white" opacity="0.1"/>
+                                                        <circle cx="150" cy="160" r="30" fill="white" opacity="0.3"/>
+                                                        <rect x="200" y="140" width="250" height="40" rx="20" fill="white" opacity="0.2"/>
+                                                        <rect x="200" y="200" width="180" height="15" rx="7" fill="white" opacity="0.15"/>
+                                                        <rect x="200" y="230" width="220" height="15" rx="7" fill="white" opacity="0.15"/>
+                                                        <rect x="200" y="260" width="120" height="25" rx="12" fill="#4CAF50" opacity="0.8"/>
+                                                        <text x="300" y="340" font-family="Inter, sans-serif" font-size="16" fill="white" text-anchor="middle" opacity="0.9">E-commerce Platform</text>
+                                                    </svg>`
+                                                        : currentItem.id === 2
+                                                          ? `<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                                                        <defs>
+                                                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+                                                                <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <rect width="100%" height="100%" fill="url(#grad2)"/>
+                                                        <rect x="80" y="60" width="440" height="280" rx="20" fill="white" opacity="0.1"/>
+                                                        <rect x="100" y="80" width="400" height="40" rx="5" fill="white" opacity="0.2"/>
+                                                        <rect x="100" y="140" width="190" height="120" rx="10" fill="white" opacity="0.15"/>
+                                                        <rect x="310" y="140" width="190" height="120" rx="10" fill="white" opacity="0.15"/>
+                                                        <circle cx="150" cy="200" r="25" fill="#FF6B6B" opacity="0.7"/>
+                                                        <circle cx="360" cy="200" r="25" fill="#4ECDC4" opacity="0.7"/>
+                                                        <rect x="100" y="280" width="400" height="40" rx="5" fill="white" opacity="0.2"/>
+                                                        <text x="300" y="350" font-family="Inter, sans-serif" font-size="16" fill="white" text-anchor="middle" opacity="0.9">Business Dashboard</text>
+                                                    </svg>`
+                                                          : `<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                                                        <defs>
+                                                            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                <stop offset="0%" style="stop-color:#ee0979;stop-opacity:1" />
+                                                                <stop offset="100%" style="stop-color:#ff6a00;stop-opacity:1" />
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <rect width="100%" height="100%" fill="url(#grad3)"/>
+                                                        <rect x="200" y="60" width="200" height="320" rx="25" fill="white" opacity="0.1"/>
+                                                        <rect x="220" y="80" width="160" height="25" rx="12" fill="white" opacity="0.3"/>
+                                                        <rect x="220" y="120" width="160" height="180" rx="15" fill="white" opacity="0.15"/>
+                                                        <circle cx="270" cy="180" r="20" fill="#FF4757" opacity="0.8"/>
+                                                        <circle cx="330" cy="180" r="20" fill="#2ED573" opacity="0.8"/>
+                                                        <rect x="240" y="220" width="120" height="15" rx="7" fill="white" opacity="0.2"/>
+                                                        <rect x="240" y="245" width="80" height="15" rx="7" fill="white" opacity="0.2"/>
+                                                        <rect x="220" y="320" width="160" height="40" rx="20" fill="white" opacity="0.2"/>
+                                                        <text x="300" y="370" font-family="Inter, sans-serif" font-size="16" fill="white" text-anchor="middle" opacity="0.9">Mobile Delivery App</text>
+                                                    </svg>`;
+                                                target.src = `data:image/svg+xml;base64,${btoa(svgContent)}`;
                                             }}
                                         />
                                     </div>
