@@ -10,8 +10,8 @@ export const Navigation: React.FC = () => {
 
     return (
         <nav
-            className="fixed top-4 right-4 z-50 card rounded-lg shadow-lg"
-            style={{ backgroundColor: "var(--color-card-background)" }}
+            className="fixed top-4 right-4 z-50 rounded-lg"
+            style={{ backgroundColor: "transparent" }}
             aria-label="Navegação principal"
         >
             <ul className="flex flex-col gap-2" style={{ padding: "16px" }}>

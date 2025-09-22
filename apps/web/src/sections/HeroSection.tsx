@@ -14,6 +14,21 @@ export const HeroSection: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
+                    <motion.div
+                        className="hero-brand"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: 600,
+                            color: "var(--color-accent-primary)",
+                            marginBottom: "16px",
+                            letterSpacing: "2px",
+                        }}
+                    >
+                        INOVACODE
+                    </motion.div>
                     <motion.h1
                         className="hero-title"
                         initial={{ opacity: 0, y: 30 }}
