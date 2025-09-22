@@ -41,7 +41,7 @@ async function bootstrap() {
     const host = process.env.API_HOST || "0.0.0.0";
 
     await app.listen(port, host);
-    
+
     const url = await app.getUrl();
     console.log(`🚀 Application is running on: ${url}`);
 }
