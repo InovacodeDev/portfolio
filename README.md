@@ -32,16 +32,42 @@ This workspace contains the monorepo scaffold for the Inovacode landing page and
     - Follow the guide in [`docs/setup-database.md`](./docs/setup-database.md)
     - Copy `.env.example` to `.env.local` and fill in your Supabase credentials
 
-3. **Start development:**
+3. **Setup git hooks (recommended):**
+
+    ```bash
+    ./scripts/setup-hooks.sh
+    ```
+
+4. **Start development:**
 
     ```bash
     pnpm dev
     ```
 
-4. **Access the applications:**
-    - Frontend: http://localhost:5173
-    - API: http://localhost:3000
-    - Health check: http://localhost:3000/healthz
+5. **Access the applications:**
+    - Frontend: http://localhost:3000
+    - API: http://localhost:3000/api
+
+## 🔒 Git Hooks
+
+This project includes git hooks to maintain code quality and dependency consistency:
+
+- **pre-push**: Validates frozen lockfile consistency
+    - Ensures `pnpm-lock.yaml` is in sync with `package.json` files
+    - Prevents pushes with inconsistent dependencies
+    - Validates lockfile format and integrity
+
+**Setup hooks:**
+
+```bash
+./scripts/setup-hooks.sh
+```
+
+**Skip hooks temporarily:**
+
+```bash
+git push --no-verify
+```
 
 ## 📋 Available Scripts
 
