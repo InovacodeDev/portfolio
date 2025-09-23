@@ -7,7 +7,7 @@ This document outlines the solution to resolve the Vercel deployment issue where
 ## Problem
 
 - Vercel was showing error: "Error: No Output Directory named 'dist' found after the Build completed"
-- The build command `pnpm turbo run build` was only building `@inovacode/web` 
+- The build command `pnpm turbo run build` was only building `@inovacode/web`
 - Files were generated in `apps/web/dist` but Vercel expected them in the root `dist` directory
 
 ## Root Cause
@@ -21,11 +21,13 @@ This document outlines the solution to resolve the Vercel deployment issue where
 ### 1. Updated Build Command
 
 Changed from:
+
 ```json
 "buildCommand": "pnpm turbo run build"
 ```
 
 To:
+
 ```json
 "buildCommand": "pnpm turbo run build --filter=@inovacode/web && cp -r apps/web/dist/* ./"
 ```
@@ -33,11 +35,13 @@ To:
 ### 2. Updated Output Directory
 
 Changed from:
+
 ```json
 "outputDirectory": "apps/web/dist"
 ```
 
 To:
+
 ```json
 "outputDirectory": "."
 ```
@@ -83,6 +87,7 @@ To:
 ## Reference Implementation
 
 This solution is based on the successful implementation used in the shop-wise project:
+
 - Similar monorepo structure with Turbo
 - Same Vercel deployment pattern
 - Proven to work in production
@@ -108,11 +113,12 @@ ls -la | grep -E "(index\.html|assets)"
 ## Deployment Process
 
 1. **Commit Changes**:
-   ```bash
-   git add vercel.json
-   git commit -m "fix: resolve Vercel output directory issue"
-   git push
-   ```
+
+    ```bash
+    git add vercel.json
+    git commit -m "fix: resolve Vercel output directory issue"
+    git push
+    ```
 
 2. **Automatic Deployment**: Vercel will automatically trigger a new deployment
 
@@ -121,6 +127,7 @@ ls -la | grep -E "(index\.html|assets)"
 ## Monitoring
 
 After deployment, verify:
+
 - ✅ Web application loads correctly
 - ✅ API endpoints respond (e.g., `/api/v1/contact`)
 - ✅ No 404 errors on static assets
