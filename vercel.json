@@ -3,18 +3,11 @@
     "builds": [
         {
             "src": "apps/web/package.json",
-            "use": "@vercel/static-build",
+            "use": "@vercel/next",
             "config": {
-                "buildCommand": "cd ../.. && pnpm turbo run build --filter=@inovacode/web --force",
-                "outputDirectory": "apps/web/dist"
+                "buildCommand": "cd ../.. && pnpm turbo run build --filter=@inovacode/web"
             }
         }
     ],
-    "installCommand": "pnpm install",
-    "rewrites": [
-        {
-            "source": "/api/(.*)",
-            "destination": "/apps/api/api/index.js"
-        }
-    ]
+    "installCommand": "pnpm install"
 }

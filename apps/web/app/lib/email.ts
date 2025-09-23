@@ -1,21 +1,21 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 interface ContactEmailData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
 }
 
 if (!process.env.RESEND_API_KEY) {
-  console.warn('RESEND_API_KEY environment variable is not set');
+    console.warn("RESEND_API_KEY environment variable is not set");
 }
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 // Simple template function to replace Handlebars for serverless compatibility
 function renderContactTemplate(data: ContactEmailData): string {
-  return `
+    return `
 <html>
   <head>
     <meta charset='UTF-8' />
@@ -113,23 +113,23 @@ function renderContactTemplate(data: ContactEmailData): string {
 }
 
 export async function sendContactNotification(data: ContactEmailData): Promise<void> {
-  if (!resend) {
-    console.warn('Resend not configured, skipping email notification');
-    return;
-  }
+    if (!resend) {
+        console.warn("Resend not configured, skipping email notification");
+        return;
+    }
 
-  const htmlContent = renderContactTemplate(data);
+    const htmlContent = renderContactTemplate(data);
 
-  try {
-    await resend.emails.send({
-      from: 'InovaCode <noreply@inovacode.dev>',
-      to: ['contato@inovacode.dev'],
-      subject: `Nova mensagem de contato: ${data.subject}`,
-      html: htmlContent,
-      reply_to: data.email,
-    });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    throw new Error('Failed to send email notification');
-  }
+    try {
+        await resend.emails.send({
+            from: "InovaCode <noreply@inovacode.dev>",
+            to: ["contato@inovacode.dev"],
+            subject: `Nova mensagem de contato: ${data.subject}`,
+            html: htmlContent,
+            reply_to: data.email,
+        });
+    } catch (error) {
+        console.error("Error sending email:", error);
+        throw new Error("Failed to send email notification");
+    }
 }

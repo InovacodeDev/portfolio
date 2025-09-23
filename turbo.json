@@ -37,7 +37,9 @@
             ],
             "outputs": [
                 "dist/**",
-                "build/**"
+                "build/**",
+                ".next/**",
+                "!.next/cache/**"
             ],
             "env": [
                 "DATABASE_URL",
