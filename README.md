@@ -1,24 +1,31 @@
-# Inovacode Portfolio (MVP)
+# Inovacode Portfolio
 
-This workspace contains the monorepo scaffold for the Inovacode landing page and portfolio.
+This is a modern Next.js application for the Inovacode landing page and portfolio, featuring a contact form with email notifications.
 
 ## 📈 Project Status
 
-**🎯 Épico 1: CONCLUÍDO ✅**
+**🎯 Migration Complete: CONCLUÍDO ✅**
 
-- T-101: Monorepo setup com Turborepo e pnpm ✅
-- T-102: Database PostgreSQL no Supabase ✅
-- T-103: Pipeline CI com GitHub Actions ✅
+-   ✅ Migrated from Turborepo monorepo to single Next.js project
+-   ✅ Consolidated database (Drizzle ORM) into unified structure
+-   ✅ Updated all configurations for single project architecture
+-   ✅ Vercel deployment optimized with Next.js framework detection
 
-**Next**: Épico 2 - Implementação Frontend estática
+## 🏗️ Project Structure
 
-## 🏗️ Workspaces
-
-- `apps/web` - Frontend (Vite + React + Tailwind)
-- `apps/api` - Backend (Fastify + PostgreSQL + Drizzle)
-- `packages/db` - Shared DB schema (Drizzle)
-- `packages/tsconfig` - Shared TypeScript configurations
-- `packages/eslint-config` - Shared ESLint configurations
+```
+├── app/                    # Next.js App Router
+│   ├── api/               # API Routes
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Home page
+├── src/
+│   ├── components/        # React components
+│   ├── lib/              # Utilities and database
+│   ├── styles/           # Global styles
+│   └── types/            # TypeScript types
+├── public/               # Static assets
+└── docs/                 # Documentation
+```
 
 ## 🚀 Quickstart
 
@@ -28,9 +35,11 @@ This workspace contains the monorepo scaffold for the Inovacode landing page and
     pnpm install
     ```
 
-2. **Configure database:**
-    - Follow the guide in [`docs/setup-database.md`](./docs/setup-database.md)
-    - Copy `.env.example` to `.env.local` and fill in your Supabase credentials
+2. **Configure environment:**
+
+    - Copy `.env.example` to `.env.local` and fill in your credentials:
+        - `DATABASE_URL` - PostgreSQL connection string
+        - `RESEND_API_KEY` - For email notifications
 
 3. **Setup git hooks (recommended):**
 
@@ -44,18 +53,18 @@ This workspace contains the monorepo scaffold for the Inovacode landing page and
     pnpm dev
     ```
 
-5. **Access the applications:**
-    - Frontend: http://localhost:3000
-    - API: http://localhost:3000/api
+5. **Access the application:**
+    - Application: http://localhost:3000
+    - Contact API: http://localhost:3000/api/contact
 
 ## 🔒 Git Hooks
 
 This project includes git hooks to maintain code quality and dependency consistency:
 
-- **pre-push**: Validates frozen lockfile consistency
-    - Ensures `pnpm-lock.yaml` is in sync with `package.json` files
-    - Prevents pushes with inconsistent dependencies
-    - Validates lockfile format and integrity
+-   **pre-push**: Validates frozen lockfile consistency
+    -   Ensures `pnpm-lock.yaml` is in sync with `package.json`
+    -   Prevents pushes with inconsistent dependencies
+    -   Validates lockfile format and integrity
 
 **Setup hooks:**
 
@@ -71,47 +80,69 @@ git push --no-verify
 
 ## 📋 Available Scripts
 
-- `pnpm dev` - Start all apps in development mode
-- `pnpm build` - Build all apps for production
-- `pnpm lint` - Lint all packages
-- `pnpm type-check` - Type check all TypeScript packages
-- `pnpm test` - Run tests across all packages
+-   `pnpm dev` - Start development server
+-   `pnpm build` - Build for production
+-   `pnpm start` - Start production server
+-   `pnpm lint` - Lint codebase
+-   `pnpm type-check` - TypeScript type checking
+-   `pnpm test` - Run tests
+-   `pnpm db:generate` - Generate database migrations
+-   `pnpm db:migrate` - Run database migrations
+-   `pnpm db:studio` - Open Drizzle Studio
 
-## 🚀 CI/CD Pipeline
+## 🚀 Deployment
 
-This project includes a comprehensive CI pipeline that runs on every Pull Request:
+### Vercel (Recommended)
 
-- **Lint**: ESLint verification across all packages
-- **Type Check**: TypeScript type verification
-- **Test**: Unit tests execution
-- **Build**: Production build validation
+This project is optimized for Vercel deployment with Next.js framework detection:
 
-The pipeline uses **Turborepo caching** and **pnpm optimizations** for fast execution.
+1. Connect your repository to Vercel
+2. Configure environment variables:
+    - `DATABASE_URL` - PostgreSQL connection string
+    - `RESEND_API_KEY` - Email service API key
+3. Deploy automatically on push
 
-See the complete CI/CD documentation at [`docs/ci-cd-pipeline.md`](./docs/ci-cd-pipeline.md).
+### Manual Deployment
 
-## 🗄️ Database Setup
+```bash
+pnpm build
+pnpm start
+```
 
-This project uses **Supabase** (PostgreSQL) as the database. See the complete setup guide at [`docs/setup-database.md`](./docs/setup-database.md).
+## 🗄️ Database
 
-Quick setup:
+This project uses **Drizzle ORM** with PostgreSQL. Database schema is located in `src/lib/db/`.
 
-1. Create a project at [supabase.com](https://supabase.com)
-2. Copy `.env.example` to `.env.local`
-3. Fill in your database credentials
-4. Run `pnpm dev` to start development
+**Quick setup:**
+
+1. Set up a PostgreSQL database (Supabase recommended)
+2. Add `DATABASE_URL` to `.env.local`
+3. Generate and run migrations:
+    ```bash
+    pnpm db:generate
+    pnpm db:migrate
+    ```
 
 ## 📚 Documentation
 
-- [CI/CD Pipeline](./docs/ci-cd-pipeline.md) - GitHub Actions workflow documentation
-- [Database Setup](./docs/setup-database.md) - Complete Supabase configuration guide
-- [Development Tasks](./docs/development/tasks.md) - Implementation backlog
-- [Technical Design](./docs/development/technical_design.md) - System architecture
+-   [Database Setup](./docs/setup-database.md) - Complete database configuration guide
+-   [Development Tasks](./docs/development/tasks.md) - Implementation backlog
+-   [Technical Design](./docs/development/technical_design.md) - System architecture
+-   [Features Documentation](./docs/features/) - Feature-specific guides
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React 19, Vite, Tailwind CSS, TanStack Router
-- **Backend**: Fastify, TypeScript, Zod validation
-- **Database**: PostgreSQL (Supabase), Drizzle ORM
-- **Monorepo**: Turborepo with pnpm workspaces
-- **Deploy**: Vercel (frontend) + Fly.io (backend)
+-   **Framework**: Next.js 15 with App Router
+-   **Styling**: Tailwind CSS v4
+-   **Database**: PostgreSQL with Drizzle ORM
+-   **Email**: Resend API
+-   **Deployment**: Vercel
+-   **Package Manager**: pnpm
+
+## 🛠️ Tech Stack
+
+-   **Frontend**: React 19, Vite, Tailwind CSS, TanStack Router
+-   **Backend**: Fastify, TypeScript, Zod validation
+-   **Database**: PostgreSQL (Supabase), Drizzle ORM
+-   **Monorepo**: Turborepo with pnpm workspaces
+-   **Deploy**: Vercel (frontend) + Fly.io (backend)
