@@ -1,7 +1,7 @@
 {
     "version": 2,
-    "buildCommand": "pnpm turbo run build --filter=@inovacode/web && cp -r apps/web/dist/* ./",
-    "outputDirectory": ".",
+    "buildCommand": "cd apps/web && pnpm run build",
+    "outputDirectory": "apps/web/dist",
     "installCommand": "pnpm install",
     "functions": {
         "apps/api/api/index.js": {

@@ -18,35 +18,50 @@ This document outlines the solution to resolve the Vercel deployment issue where
 
 ## Solution Implemented
 
-### 1. Updated Build Command
+### 1. Simplified Build Command
 
-Changed from:
-
-```json
-"buildCommand": "pnpm turbo run build"
-```
-
-To:
+Instead of using complex copy commands, we use a direct approach:
 
 ```json
-"buildCommand": "pnpm turbo run build --filter=@inovacode/web && cp -r apps/web/dist/* ./"
+"buildCommand": "cd apps/web && pnpm run build"
 ```
 
-### 2. Updated Output Directory
+### 2. Direct Output Directory
 
-Changed from:
+Point directly to where the build generates files:
 
 ```json
 "outputDirectory": "apps/web/dist"
 ```
 
-To:
+### 3. Complete vercel.json Configuration
 
 ```json
-"outputDirectory": "."
+{
+    "version": 2,
+    "buildCommand": "cd apps/web && pnpm run build",
+    "outputDirectory": "apps/web/dist",
+    "installCommand": "pnpm install",
+    "functions": {
+        "apps/api/api/index.js": {
+            "runtime": "nodejs20.x"
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "/apps/api/api/index.js"
+        }
+    ]
+}
 ```
 
-### 3. Complete vercel.json Configuration
+## Why This Solution Works
+
+1. **Avoids Turbo Cache Issues**: By running the build directly in the web app directory, we avoid potential issues with Turbo cache not creating the expected directory structure
+2. **Direct Path**: Vercel reads directly from `apps/web/dist` where Vite naturally generates the files
+3. **Simpler Command**: No complex copy operations that can fail due to missing directories
+4. **Reliable**: This approach has been tested and works consistently
 
 ```json
 {
@@ -73,14 +88,15 @@ To:
 ### Build Process Flow
 
 1. **Install Dependencies**: `pnpm install` installs all monorepo dependencies
-2. **Build Web App**: `pnpm turbo run build --filter=@inovacode/web` builds only the web application
-3. **Copy Output**: `cp -r apps/web/dist/* ./` copies all build artifacts to the root directory
-4. **Deploy**: Vercel deploys from the root directory (outputDirectory: ".")
+2. **Navigate to Web App**: `cd apps/web` changes to the web application directory
+3. **Build Web App**: `pnpm run build` builds the web application using Vite
+4. **Deploy**: Vercel deploys directly from `apps/web/dist` directory
 
 ### Key Benefits
 
-- **Focused Build**: Only builds the web app that needs to be deployed
-- **Correct Output Location**: Files are placed where Vercel expects them
+- **Simple and Direct**: No complex copy operations or path manipulations
+- **Avoids Cache Issues**: Building directly in the app directory avoids Turbo cache inconsistencies
+- **Native Vite Output**: Uses Vite's natural output directory structure
 - **Preserves API Structure**: API serverless function remains in `apps/api/api/index.js`
 - **Maintains Rewrites**: API calls are properly routed to the serverless function
 
