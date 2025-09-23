@@ -1,6 +1,16 @@
 import { ContactFormData, ContactResponse, ContactError } from "./schemas";
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || "";
+// Normalize API URL to always include '/api' prefix expected by backend
+const API_BASE_URL = (() => {
+    const configured = (import.meta.env.VITE_API_URL as string) || "";
+
+    // In production (when no VITE_API_URL is set), use relative paths
+    if (!configured) return "/api";
+
+    // For development, ensure the URL ends with /api
+    const trimmed = configured.replace(/\/+$/, "");
+    return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
+})();
 
 function buildUrl(path: string) {
     // ensure no double slashes and support empty base for same-origin (Vercel)
@@ -26,7 +36,7 @@ export const apiClient = {
     // Submeter formulário de contato
     async submitContact(data: ContactFormData): Promise<ContactResponse> {
         try {
-            const response = await fetch(buildUrl("/api/v1/contact"), {
+            const response = await fetch(buildUrl("/v1/contact"), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
