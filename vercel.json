@@ -1,7 +1,15 @@
 {
     "version": 2,
-    "buildCommand": "pnpm turbo run build --filter=@inovacode/web --filter=@inovacode/api && cp -r apps/web/dist ./dist",
-    "outputDirectory": "dist",
+    "builds": [
+        {
+            "src": "apps/web/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "buildCommand": "cd ../.. && pnpm turbo run build --filter=@inovacode/web --force",
+                "outputDirectory": "apps/web/dist"
+            }
+        }
+    ],
     "installCommand": "pnpm install",
     "functions": {
         "apps/api/api/index.js": {
