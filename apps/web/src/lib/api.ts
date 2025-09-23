@@ -1,22 +1,10 @@
 import { ContactFormData, ContactResponse, ContactError } from "./schemas";
 
-// Normalize API URL to always include '/api' prefix expected by backend
-const API_BASE_URL = (() => {
-    const configured = (import.meta.env.VITE_API_URL as string) || "";
-
-    // In production (when no VITE_API_URL is set), use relative paths
-    if (!configured) return "/api";
-
-    // For development, ensure the URL ends with /api
-    const trimmed = configured.replace(/\/+$/, "");
-    return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
-})();
+// Use relative paths for Next.js API routes
+const API_BASE_URL = "/api";
 
 function buildUrl(path: string) {
-    // ensure no double slashes and support empty base for same-origin (Vercel)
-    const base = API_BASE_URL.replace(/\/$/, "");
-    if (!base) return path;
-    return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
+    return `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
 // Classe de erro personalizada para erros da API
@@ -36,7 +24,7 @@ export const apiClient = {
     // Submeter formulário de contato
     async submitContact(data: ContactFormData): Promise<ContactResponse> {
         try {
-            const response = await fetch(buildUrl("/v1/contact"), {
+            const response = await fetch(buildUrl("/contact"), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -61,19 +49,5 @@ export const apiClient = {
         }
     },
 
-    // Health check do servidor
-    async healthCheck(): Promise<{ status: string; database: string }> {
-        try {
-            const response = await fetch(buildUrl("/healthz"));
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error("Health check failed");
-            }
-
-            return data;
-        } catch {
-            throw new Error("Servidor indisponível");
-        }
-    },
+    // Health check removido pois não é necessário no Next.js
 };

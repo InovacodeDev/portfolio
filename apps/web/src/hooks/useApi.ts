@@ -20,10 +20,3 @@ export const useSubmitContact = (options: UseSubmitContactOptions = {}) => {
         },
     });
 };
-
-// Hook para verificar saúde do servidor
-export const useHealthCheck = () => {
-    return useMutation({
-        mutationFn: () => apiClient.healthCheck(),
-    });
-};
