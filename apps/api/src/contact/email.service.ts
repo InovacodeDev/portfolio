@@ -29,7 +29,11 @@ export class EmailService {
 
   private loadTemplates() {
     try {
-      const templatePath = join(process.cwd(), 'templates', 'contact-notification.hbs');
+      const templatePath = join(
+        process.cwd(),
+        'templates',
+        'contact-notification.hbs',
+      );
       const templateSource = readFileSync(templatePath, 'utf-8');
       this.contactTemplate = Handlebars.compile(templateSource);
     } catch (error) {

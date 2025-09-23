@@ -13,7 +13,8 @@ export class ContactController {
       await this.contactService.create(createContactDto);
       return {
         success: true,
-        message: 'Mensagem enviada com sucesso! Entraremos em contato em breve.',
+        message:
+          'Mensagem enviada com sucesso! Entraremos em contato em breve.',
       };
     } catch (error) {
       throw error;
