@@ -1,46 +1,93 @@
-import "reflect-metadata";
-import { config } from "dotenv";
-import path from "path";
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-
-// Load environment variables from .env.local in project root
-config({ path: path.resolve(__dirname, "../../../.env.local") });
+import { NestFactory } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+import { Logger } from 'nestjs-pino';
+import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-    // Create Nest app with default Express adapter for better Vercel compatibility
-    const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter({ logger: false }),
+    {
+      bufferLogs: true,
+    },
+  );
 
-    // Enable CORS
-    app.enableCors({
-        origin: true,
-        credentials: true,
-    });
+  // Use Pino logger
+  app.useLogger(app.get(Logger));
 
-    // Set global prefix for API routes
-    app.setGlobalPrefix("");
+  // Enable CORS
+  await app.register(require('@fastify/cors'), {
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'https://www.inovacode.dev',
+      'https://inovacode.dev',
+    ],
+    credentials: true,
+  });
 
-    const port = Number(process.env.API_PORT) || 3001;
-    const host = process.env.API_HOST || "0.0.0.0";
+  // Global validation pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
-    await app.listen(port, host);
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT', 3001);
+  const host = configService.get<string>('HOST', '0.0.0.0');
 
-    const url = await app.getUrl();
-    console.log(`🚀 Application is running on: ${url}`);
+  await app.listen(port, host);
+  console.log(`🚀 API running on http://${host}:${port}`);
 }
 
-// Handle shutdown gracefully
-process.on("SIGINT", async () => {
-    console.log("Received SIGINT, shutting down gracefully...");
-    process.exit(0);
-});
+// For serverless environments
+let cachedApp: any;
 
-process.on("SIGTERM", async () => {
-    console.log("Received SIGTERM, shutting down gracefully...");
-    process.exit(0);
-});
+export async function createApp(): Promise<any> {
+  if (!cachedApp) {
+    const app = await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      new FastifyAdapter({ logger: false }),
+      {
+        bufferLogs: true,
+      },
+    );
 
-bootstrap().catch((error) => {
-    console.error("Error starting application:", error);
-    process.exit(1);
-});
+    app.useLogger(app.get(Logger));
+
+    await app.register(require('@fastify/cors'), {
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'https://www.inovacode.dev',
+        'https://inovacode.dev',
+      ],
+      credentials: true,
+    });
+
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
+
+    await app.init();
+    cachedApp = app;
+  }
+  return cachedApp;
+}
+
+// Only run bootstrap if not in serverless environment
+if (require.main === module) {
+  bootstrap();
+}
