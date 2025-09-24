@@ -40,6 +40,13 @@ export const ContactSection: React.FC = () => {
                 setError("root", {
                     message: error.data?.message || "Dados inválidos. Verifique os campos e tente novamente.",
                 });
+            } else if (error.status === 429) {
+                // Rate limiting error
+                setError("root", {
+                    message:
+                        error.data?.message ||
+                        "Você já enviou uma mensagem recentemente. Aguarde antes de enviar novamente.",
+                });
             } else if (error.status === 408) {
                 setError("root", {
                     message: "A requisição demorou muito para responder. Tente novamente.",
@@ -146,31 +153,31 @@ export const ContactSection: React.FC = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="subject" className="form-label">
-                                        Assunto
+                                    <label htmlFor="project-name" className="form-label">
+                                        Nome do projeto
                                     </label>
                                     <input
                                         type="text"
-                                        id="subject"
-                                        {...register("subject")}
-                                        className={`form-input ${errors.subject ? "error" : ""}`}
-                                        placeholder="Assunto da mensagem"
+                                        id="project-name"
+                                        {...register("project-name")}
+                                        className={`form-input ${errors['project-name'] ? "error" : ""}`}
+                                        placeholder="Nome do projeto"
                                     />
-                                    {errors.subject && <span className="error-message">{errors.subject.message}</span>}
+                                    {errors['project-name'] && <span className="error-message">{errors['project-name'].message}</span>}
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="message" className="form-label">
-                                        Mensagem
+                                    <label htmlFor="project" className="form-label">
+                                        Projeto
                                     </label>
                                     <textarea
-                                        id="message"
-                                        {...register("message")}
-                                        className={`form-textarea ${errors.message ? "error" : ""}`}
+                                        id="project"
+                                        {...register("project")}
+                                        className={`form-textarea ${errors.project ? "error" : ""}`}
                                         placeholder="Conte-nos sobre seu projeto..."
                                         rows={5}
                                     />
-                                    {errors.message && <span className="error-message">{errors.message.message}</span>}
+                                    {errors.project && <span className="error-message">{errors.project.message}</span>}
                                 </div>
 
                                 {errors.root && <div className="error-message text-center">{errors.root.message}</div>}

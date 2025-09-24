@@ -9,8 +9,8 @@ export const contactFormSchema = z.object({
         .email("Por favor, insira um email válido")
         .max(255, "Email muito longo")
         .toLowerCase(),
-    subject: z.string().min(1, "Assunto é obrigatório").max(255, "Assunto muito longo").trim(),
-    message: z.string().min(1, "Mensagem é obrigatória").max(5000, "Mensagem muito longa").trim(),
+    'project-name': z.string().min(1, "Nome do projeto é obrigatório").max(255, "Nome do projeto muito longo").trim(),
+    'project': z.string().min(1, "Projeto é obrigatória").max(5000, "Projeto muito longo").trim(),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
@@ -21,6 +21,7 @@ export const contactResponseSchema = z.object({
     id: z.number().optional(),
     message: z.string(),
     timestamp: z.string(),
+    rateLimited: z.boolean().optional(),
 });
 
 export type ContactResponse = z.infer<typeof contactResponseSchema>;

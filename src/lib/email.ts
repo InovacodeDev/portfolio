@@ -6,8 +6,8 @@ import path from "path";
 interface ContactEmailData {
     name: string;
     email: string;
-    subject: string;
-    message: string;
+    'project-name': string;
+    project: string;
 }
 
 if (!process.env.RESEND_API_KEY) {
@@ -140,7 +140,7 @@ export async function sendContactNotification(data: ContactEmailData): Promise<v
         await resend.emails.send({
             from: `InovaCode <${process.env.EMAIL_FROM}>`,
             to: [`${process.env.EMAIL_TO}`],
-            subject: `Nova mensagem de contato: ${data.subject}`,
+            subject: `Nova mensagem de contato: ${data['project-name']}`,
             html: htmlContent,
             reply_to: data.email,
         });
