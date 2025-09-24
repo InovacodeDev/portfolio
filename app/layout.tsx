@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import "../src/styles/globals.css";
 import { QueryProvider } from "./providers";
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="pt-BR">
             <body className={inter.className}>
                 <QueryProvider>{children}</QueryProvider>
+                <SpeedInsights />
             </body>
         </html>
     );
