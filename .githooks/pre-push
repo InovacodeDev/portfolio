@@ -71,6 +71,7 @@ while read local_ref local_sha remote_ref remote_sha; do
 done
 
 # Additional validation: Check if there are any uncommitted changes to package.json files
+# Only consider files that are tracked by git (not ignored)
 uncommitted_package_files=$(git status --porcelain | grep -E "package\.json$" | wc -l)
 if [ "$uncommitted_package_files" -gt 0 ]; then
     print_error "Uncommitted changes detected in package.json files!"
@@ -83,14 +84,18 @@ print_status "Checking lockfile freshness..."
 
 lockfile_time=$(stat -f %m pnpm-lock.yaml 2>/dev/null || stat -c %Y pnpm-lock.yaml 2>/dev/null)
 
-# Find all package.json files and check their modification times
+# Find all package.json files that are tracked by git (respecting .gitignore)
 stale_packages=""
-while IFS= read -r -d '' package_file; do
+while IFS= read -r package_file; do
+    # Skip if file doesn't exist or is empty
+    [ -z "$package_file" ] && continue
+    [ ! -f "$package_file" ] && continue
+    
     package_time=$(stat -f %m "$package_file" 2>/dev/null || stat -c %Y "$package_file" 2>/dev/null)
     if [ "$package_time" -gt "$lockfile_time" ]; then
         stale_packages="$stale_packages\n  - $package_file"
     fi
-done < <(find . -name "package.json" -not -path "./node_modules/*" -print0)
+done < <(git ls-files | grep -E "package\.json$")
 
 if [ -n "$stale_packages" ]; then
     print_error "The following package.json files are newer than pnpm-lock.yaml:"
