@@ -27,7 +27,7 @@ export const HeroSection: React.FC = () => {
                         }}
                     >
                         <Image
-                            src="../../assets/inovacode_logo_text_white.png"
+                            src="/assets/inovacode_logo_text_white.png"
                             alt="INOVACODE"
                             className="hero-logo"
                             width={400}
