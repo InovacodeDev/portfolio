@@ -1,4 +1,7 @@
 import { Resend } from "resend";
+import Handlebars from "handlebars";
+import fs from "fs";
+import path from "path";
 
 interface ContactEmailData {
     name: string;
@@ -13,103 +16,115 @@ if (!process.env.RESEND_API_KEY) {
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-// Simple template function to replace Handlebars for serverless compatibility
-function renderContactTemplate(data: ContactEmailData): string {
-    return `
+// Cache do template compilado
+let compiledTemplate: HandlebarsTemplateDelegate | null = null;
+
+function getCompiledTemplate(): HandlebarsTemplateDelegate {
+    if (!compiledTemplate) {
+        try {
+            // Caminho para o template - usar path absoluto para serverless
+            const templatePath = path.join(process.cwd(), "app", "templates", "contact-notification.hbs");
+            const templateSource = fs.readFileSync(templatePath, "utf8");
+            compiledTemplate = Handlebars.compile(templateSource);
+        } catch (error) {
+            console.error("Error loading Handlebars template:", error);
+            // Fallback para um template simples
+            const fallbackTemplate = `
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='UTF-8' />
-    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+<head>
+    <meta charset="UTF-8">
     <title>Nova Mensagem de Contato - InovaCode</title>
     <style>
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      .header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 20px;
-        text-align: center;
-        border-radius: 8px 8px 0 0;
-      }
-      .content {
-        background: #f9f9f9;
-        padding: 30px;
-        border-radius: 0 0 8px 8px;
-        border: 1px solid #e1e1e1;
-      }
-      .field {
-        margin-bottom: 20px;
-        padding: 15px;
-        background: white;
-        border-radius: 5px;
-        border-left: 4px solid #667eea;
-      }
-      .field-label {
-        font-weight: bold;
-        color: #555;
-        margin-bottom: 5px;
-        text-transform: uppercase;
-        font-size: 12px;
-        letter-spacing: 1px;
-      }
-      .field-value {
-        color: #333;
-        font-size: 14px;
-        line-height: 1.5;
-      }
-      .message-content {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-      }
-      .footer {
-        text-align: center;
-        padding: 20px;
-        color: #666;
-        font-size: 12px;
-      }
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #282828; 
+            color: #f5f5f5; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: #1e1e1e; 
+            padding: 30px; 
+            border-radius: 8px; 
+        }
+        .header { 
+            background-color: #f5f5f5; 
+            color: #282828; 
+            padding: 20px; 
+            text-align: center; 
+            border-radius: 8px 8px 0 0; 
+        }
+        .content { 
+            padding: 20px; 
+        }
+        .field { 
+            margin-bottom: 15px; 
+            padding: 15px; 
+            background-color: #282828; 
+            border-radius: 5px; 
+        }
+        .label { 
+            font-weight: bold; 
+            color: #f5f5f5; 
+            margin-bottom: 5px; 
+        }
     </style>
-  </head>
-  <body>
-    <div class='header'>
-      <h1>🚀 Nova Mensagem de Contato</h1>
-      <p>Recebida através do site InovaCode</p>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>INOVACODE</h1>
+            <h2>Nova Mensagem de Contato</h2>
+        </div>
+        <div class="content">
+            <div class="field">
+                <div class="label">Nome:</div>
+                <div>{{name}}</div>
+            </div>
+            <div class="field">
+                <div class="label">Email:</div>
+                <div>{{email}}</div>
+            </div>
+            <div class="field">
+                <div class="label">Assunto:</div>
+                <div>{{subject}}</div>
+            </div>
+            <div class="field">
+                <div class="label">Mensagem:</div>
+                <div>{{message}}</div>
+            </div>
+            <div class="field">
+                <div class="label">Data:</div>
+                <div>{{timestamp}}</div>
+            </div>
+        </div>
     </div>
-    
-    <div class='content'>
-      <div class='field'>
-        <div class='field-label'>Nome do Cliente</div>
-        <div class='field-value'>${data.name}</div>
-      </div>
-      
-      <div class='field'>
-        <div class='field-label'>Email para Contato</div>
-        <div class='field-value'>${data.email}</div>
-      </div>
-      
-      <div class='field'>
-        <div class='field-label'>Assunto</div>
-        <div class='field-value'>${data.subject}</div>
-      </div>
-      
-      <div class='field'>
-        <div class='field-label'>Mensagem</div>
-        <div class='field-value message-content'>${data.message}</div>
-      </div>
-    </div>
-    
-    <div class='footer'>
-      <p>Esta mensagem foi enviada através do formulário de contato do site InovaCode.</p>
-      <p>Para responder, utilize o email: ${data.email}</p>
-    </div>
-  </body>
-</html>
-`;
+</body>
+</html>`;
+            compiledTemplate = Handlebars.compile(fallbackTemplate);
+        }
+    }
+    return compiledTemplate;
+}
+
+function renderContactTemplate(data: ContactEmailData): string {
+    const template = getCompiledTemplate();
+
+    const templateData = {
+        ...data,
+        timestamp: new Date().toLocaleString("pt-BR", {
+            timeZone: "America/Sao_Paulo",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }),
+    };
+
+    return template(templateData);
 }
 
 export async function sendContactNotification(data: ContactEmailData): Promise<void> {
@@ -129,6 +144,7 @@ export async function sendContactNotification(data: ContactEmailData): Promise<v
             html: htmlContent,
             reply_to: data.email,
         });
+        console.log("Contact notification sent successfully");
     } catch (error) {
         console.error("Error sending email:", error);
         throw new Error("Failed to send email notification");

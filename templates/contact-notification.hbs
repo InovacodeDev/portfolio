@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nova Mensagem de Contato - InovaCode</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Inter', -apple-system,
+            BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #f5f5f5; background-color:
+            #282828; padding: 40px 20px; min-height: 100vh; } .email-container { max-width: 680px; margin: 0 auto;
+            background-color: #1e1e1e; border-radius: 16px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); overflow:
+            hidden; border: 1px solid rgba(245, 245, 245, 0.1); } .header { background: linear-gradient(135deg, #f5f5f5
+            0%, #e0e0e0 100%); color: #282828; padding: 48px 32px; text-align: center; position: relative; }
+            .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background:
+            linear-gradient(90deg, transparent, #282828, transparent); } .logo-section { margin-bottom: 24px; }
+            .logo-text { font-size: 28px; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; color: #282828; }
+            .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; color: #282828; } .header p { font-size:
+            16px; opacity: 0.8; font-weight: 500; color: #282828; } .content { padding: 48px 32px; background-color:
+            #1e1e1e; } .intro-text { text-align: center; margin-bottom: 40px; color: #b0b0b0; font-size: 16px; } .field
+            { margin-bottom: 32px; background-color: #282828; border-radius: 12px; padding: 24px; border-left: 4px solid
+            #f5f5f5; transition: all 0.3s ease; position: relative; overflow: hidden; } .field::before { content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent,
+            rgba(245, 245, 245, 0.3), transparent); } .field-label { font-weight: 600; color: #f5f5f5; margin-bottom:
+            12px; text-transform: uppercase; font-size: 12px; letter-spacing: 1.5px; display: flex; align-items: center;
+            gap: 8px; } .field-value { color: #f5f5f5; font-size: 16px; line-height: 1.6; font-weight: 400; }
+            .message-content { white-space: pre-wrap; word-wrap: break-word; background-color: #1e1e1e; padding: 20px;
+            border-radius: 8px; border: 1px solid rgba(245, 245, 245, 0.2); margin-top: 8px; color: #f5f5f5; } .footer {
+            background-color: #282828; text-align: center; padding: 32px; color: #b0b0b0; font-size: 14px; border-top:
+            1px solid rgba(245, 245, 245, 0.1); } .footer p { margin-bottom: 8px; } .contact-info { background-color:
+            #282828; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #f5f5f5; } .contact-info
+            strong { color: #f5f5f5; font-weight: 600; } .timestamp { margin-top: 24px; padding-top: 24px; border-top:
+            1px solid rgba(245, 245, 245, 0.2); font-size: 13px; opacity: 0.7; text-align: center; color: #b0b0b0; } /*
+            Icons using CSS */ .icon-user::before { content: '👤'; margin-right: 4px; } .icon-email::before { content:
+            '✉️'; margin-right: 4px; } .icon-subject::before { content: '📋'; margin-right: 4px; } .icon-message::before
+            { content: '💬'; margin-right: 4px; } /* Responsive */ @media (max-width: 768px) { body { padding: 20px
+            10px; } .email-container { border-radius: 12px; } .header, .content { padding: 32px 24px; } .field {
+            padding: 20px; } }
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <div class="logo-section">
+                    <div class="logo-text">INOVACODE</div>
+                </div>
+                <h1>🚀 Nova Mensagem de Contato</h1>
+                <p>Solicitação recebida através do site oficial</p>
+            </div>
+
+            <div class="content">
+                <p class="intro-text">
+                    Um novo cliente entrou em contato através do formulário do site. Confira os detalhes abaixo:
+                </p>
+
+                <div class="field">
+                    <div class="field-label icon-user">Nome do Cliente</div>
+                    <div class="field-value">{{name}}</div>
+                </div>
+
+                <div class="field">
+                    <div class="field-label icon-email">Email para Contato</div>
+                    <div class="field-value">{{email}}</div>
+                </div>
+
+                <div class="field">
+                    <div class="field-label icon-subject">Assunto</div>
+                    <div class="field-value">{{subject}}</div>
+                </div>
+
+                <div class="field">
+                    <div class="field-label icon-message">Mensagem</div>
+                    <div class="field-value">
+                        <div class="message-content">{{message}}</div>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <p><strong>💡 Próximos Passos:</strong></p>
+                    <p>• Responder em até 24h usando o email: <strong>{{email}}</strong></p>
+                    <p>• Agendar reunião se necessário</p>
+                    <p>• Adicionar ao CRM para acompanhamento</p>
+                </div>
+
+                <div class="timestamp">
+                    <p>📅 Mensagem recebida em: {{timestamp}}</p>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p><strong>InovaCode - Transformando ideias em soluções digitais</strong></p>
+                <p>Esta mensagem foi gerada automaticamente pelo sistema de contato do site.</p>
+                <p>Para responder ao cliente, utilize o email informado acima.</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -16,7 +16,6 @@
         "type-check": "tsc --noEmit",
         "test": "echo \"No tests yet\"",
         "setup-hooks": "./scripts/setup-hooks.sh",
-        "postinstall": "pnpm setup-hooks",
         "db:generate": "drizzle-kit generate",
         "db:migrate": "drizzle-kit migrate",
         "db:studio": "drizzle-kit studio"
@@ -27,6 +26,7 @@
         "axios": "latest",
         "drizzle-orm": "^0.44.5",
         "framer-motion": "^12.23.18",
+        "handlebars": "^4.7.8",
         "next": "latest",
         "postgres": "^3.4.3",
         "react": "latest",
